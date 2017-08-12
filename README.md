@@ -1,6 +1,6 @@
 # Video Visual Relation Detection Helpler
 
-This repository contains the helper script for loading [VidVRD dataset](http://lms.comp.nus.edu.sg/research/VidVRD.html), and the script for evaluating the VidVRD task.
+This repository contains some helper functions for the convenient usage of [VidVRD dataset](http://lms.comp.nus.edu.sg/research/VidVRD.html). It also has a script for evaluating the VidVRD task.
 Please cite this paper if the dataset helps your research:
 ```
 @inproceedings{shang2017video,

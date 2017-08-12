@@ -23,11 +23,11 @@ Please cite this paper if the dataset helps your research:
       "score": 0.9                              # confidence score
       "duration": [15, 150]                     # starting and ending frame IDs
       "sub_traj": [                             # subject trajectory
-        [9, 10, 45, 20],                        # bounding box at the starting frame
+        [9.0, 10.0, 45.0, 20.0],                # bounding box at the starting frame
         ...                                     # [left, top, right, bottom]
       ]
       "obj_traj": [                             # object trajectory
-        [22, 23, 67, 111],
+        [22.0, 23.0, 67.0, 111.0],
         ...
       ]
     },

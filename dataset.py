@@ -115,6 +115,8 @@ class Dataset():
       inst['triplet'] = (sub_objs[anno_inst['subject_tid']],
                         anno_inst['predicate'],
                         sub_objs[anno_inst['object_tid']])
+      inst['subject_tid'] = anno_inst['subject_tid']
+      inst['object_tid'] = anno_inst['object_tid']
       inst['duration'] = (anno_inst['begin_fid'], anno_inst['end_fid'])
       if not no_traj:
         inst['sub_traj'] = [bboxes[anno_inst['subject_tid']] for bboxes in

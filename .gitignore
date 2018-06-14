@@ -1,2 +1,7 @@
 *.pyc
 __pycache__/
+
+.vscode/
+
+baseline/features/*
+baseline/models/*

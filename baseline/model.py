@@ -27,7 +27,7 @@ def feature_preprocess(feat):
   Input feature is extracted according to Section 4.2 in the paper
   """
   # subject classeme + object classeme
-  # feat[: 35: 70]
+  # feat[:, 0: 70]
 
   # subject TrajectoryShape + HoG + HoF + MBH motion feature
   # (since this feature is Bag-of-Word type, we l1-normalize it so that
@@ -43,9 +43,9 @@ def feature_preprocess(feat):
   feat[:, 7070: 8070] = np_utils.normalize(feat[:, 7070: 8070], -1, 1)
 
   # relative posititon + size + motion feature
-  # feat[: 8070: 9070]
-  # feat[: 9070: 10070]
-  # feat[: 10070: 11070]
+  # feat[:, 8070: 9070]
+  # feat[:, 9070: 10070]
+  # feat[:, 10070: 11070]
   return feat
 
 

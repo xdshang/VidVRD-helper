@@ -23,24 +23,36 @@ _train_triplet_id = OrderedDict()
 
 
 def feature_preprocess(feat):
+  """ 
+  Input feature is extracted according to Section 4.2 in the paper
+  """
   # subject classeme + object classeme
+  # feat[: 35: 70]
+
+  # subject TrajectoryShape + HoG + HoF + MBH motion feature
+  # (since this feature is Bag-of-Word type, we l1-normalize it so that
+  # each element represents the fraction instead of count)
   feat[:, 70: 1070] = np_utils.normalize(feat[:, 70: 1070], -1, 1)
-  # subject HoG + HoF + MBH motion feature
   feat[:, 1070: 2070] = np_utils.normalize(feat[:, 1070: 2070], -1, 1)
   feat[:, 2070: 3070] = np_utils.normalize(feat[:, 2070: 3070], -1, 1)
   feat[:, 3070: 4070] = np_utils.normalize(feat[:, 3070: 4070], -1, 1)
-  # object HoG + HoF + MBH motion feature
+  # object TrajectoryShape + HoG + HoF + MBH motion feature
   feat[:, 4070: 5070] = np_utils.normalize(feat[:, 4070: 5070], -1, 1)
   feat[:, 5070: 6070] = np_utils.normalize(feat[:, 5070: 6070], -1, 1)
   feat[:, 6070: 7070] = np_utils.normalize(feat[:, 6070: 7070], -1, 1)
-  # relativity feature
   feat[:, 7070: 8070] = np_utils.normalize(feat[:, 7070: 8070], -1, 1)
+
+  # relative posititon + size + motion feature
+  # feat[: 8070: 9070]
+  # feat[: 9070: 10070]
+  # feat[: 10070: 11070]
   return feat
 
 
 class DataGenerator(FeatureExtractor):
   """
-  docstring for DataGenerator
+  Generate (incl. sample) relation features of (subject, object)s
+  in the video segments that have multiple objects detected.
   """
   def __init__(self, dataset, param, prefetch_count=2):
     super(DataGenerator, self).__init__(dataset, prefetch_count)
@@ -87,6 +99,7 @@ class DataGenerator(FeatureExtractor):
       for vid in video_indices:
         anno = dataset.get_anno(vid)
         segs = segment_video(0, anno['frame_count'])
+        # enumerate all the possible segments
         for fstart, fend in segs:
           # if multiple objects detected and the relation features extracted
           if self.extract_feature(vid, fstart, fend, dry_run=True):

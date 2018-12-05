@@ -45,6 +45,6 @@ source activate vidvrd
 pip install dlib==19.3.1 --isolated
 ``` 
 2. Download precomputed features, model and detected relations from [here](http://dl.nextcenter.org/public/nuswide/VidVRD-baseline-precomputed.zip), and decompress the zipfile under `baseline` folder.
-3. Run `python evaluation.py baseline/models/baseline_video_relations.json` to evaluate the precomputed detected relations. Since a few wrong labels in the dataset were corrected after paper submission, the result is slightly different from the one reported in the paper. Some qualitative results can be found [here](http://mm.zl.io).
+3. Run `python evaluate.py baseline/models/baseline_video_relations.json` to evaluate the precomputed detected relations. Since a few wrong labels in the dataset were corrected after paper submission, the result is slightly different from the one reported in the paper. Some qualitative results can be found [here](http://mm.zl.io).
 4. Run `python baseline.py --detect` to detect video visual relations using the precomputed model.
 5. Run `python baseline.py --train` to train a new model by adjusting the hyperparameters in the script, based on the precomputed features.

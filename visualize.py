@@ -50,8 +50,9 @@ def write_video(video, fps, size, path):
 
 def visualize(anno, video_path, out_path):
     video = read_video(video_path)
-    assert anno['frame_count']==len(video)
-    assert anno['width']==video[0].shape[1] and anno['height']==video[0].shape[0]
+    assert anno['frame_count']==len(video), '{} : anno {} video {}'.format(anno['video_id'], anno['frame_count'], len(video))
+    assert anno['width']==video[0].shape[1] and anno['height']==video[0].shape[0],\
+            '{} : anno ({}, {}) video {}'.format(anno['video_id'], anno['height'], anno['width'], video[0].shape)
     # resize video to be 720p
     ratio = 720.0/anno['height']
     boundary = 20

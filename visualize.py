@@ -85,7 +85,7 @@ def visualize(anno, video_path, out_path):
                         x['timestamp'] = r['begin_fid']
     # draw frames
     max_timestamp = 1
-    for i in range(anno['frame_count']):
+    for i in range(len(anno['trajectories'])):
         f = anno['trajectories'][i]
         for x in sorted(f, key=lambda a: a['timestamp']):
             xmin = int(round(x['bbox']['xmin']*ratio))+boundary

@@ -99,7 +99,7 @@ def eval_detection_scores(gt_relations, pred_relations, viou_threshold):
                 if ov >= viou_threshold and ov > ov_max:
                     ov_max = ov
                     k_max = gt_idx
-        if k_max > 0:
+        if k_max >= 0:
             hit_scores[pred_idx] = pred_relation['score']
             gt_detected[k_max] = True
     tp = np.isfinite(hit_scores)

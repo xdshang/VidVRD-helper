@@ -21,7 +21,7 @@ Please cite this paper if the dataset helps your research:
       # a visual relation instance
       "triplet": ["person", "ride", "bicycle"]  # relation triplet
       "score": 0.9                              # confidence score
-      "duration": [15, 150]                     # starting and ending frame IDs
+      "duration": [15, 150]                     # starting (inclusive) and ending (exclusive) frame IDs
       "sub_traj": [                             # subject trajectory
         [9.0, 10.0, 45.0, 20.0],                # bounding box at the starting frame
         ...                                     # [left, top, right, bottom]

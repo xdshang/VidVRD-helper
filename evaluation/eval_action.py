@@ -3,6 +3,7 @@ import json
 import os
 import sys
 from collections import defaultdict
+import random
 
 import numpy as np
 
@@ -14,14 +15,14 @@ def viou(traj_1, duration_1, traj_2, duration_2):
     boxes (i.e. traj) within the duration.
     """
     exit_flag = False
-    if duration_1[1] - duration_1[0] + 1 != len(traj_1):
+    if duration_1[1] - duration_1[0] != len(traj_1):
         print("The duration of duration1({}) doesnt match the traj1 shape: ({})"
-              .format(duration_1, np.array(traj_1).shape))
+              .format(duration_1, len(traj_1)))
         exit_flag = True
-    # if duration_2[1] - duration_2[0] != len(traj_2):
-    #     print("The duration of duration2({}) doesnt match the traj2 shape: ({})"
-    #           .format(duration_2, np.array(traj_2).shape))
-    #     exit_flag = True
+    if duration_2[1] - duration_2[0] != len(traj_2):
+        print("The duration of duration2({}) doesnt match the traj2 shape: ({})"
+              .format(duration_2, len(traj_2)))
+        exit_flag = True
 
     if exit_flag is True:
         sys.exit(0)
@@ -96,9 +97,7 @@ def voc_ap(rec, prec, use_07_metric=False):
 
 
 def eval_detection_scores(gt_actions, pred_actions, viou_threshold):
-    # print(type(gt_actions), gt_actions)
-    # print(type(pred_actions), pred_actions)
-
+    # print(pred_actions.keys())
     pred_actions = sorted(pred_actions, key=lambda x: x['score'], reverse=True)
     gt_detected = np.zeros((len(gt_actions),), dtype=bool)
     hit_scores = np.ones((len(pred_actions))) * -np.inf
@@ -123,7 +122,7 @@ def eval_detection_scores(gt_actions, pred_actions, viou_threshold):
     cum_fp = np.cumsum(fp).astype(np.float32)
     rec = cum_tp / np.maximum(len(gt_actions), np.finfo(np.float32).eps)
     prec = cum_tp / np.maximum(cum_tp + cum_fp, np.finfo(np.float32).eps)
-    print(prec, rec, hit_scores)
+    # print(prec, rec, hit_scores)
     return prec, rec, hit_scores
 
 
@@ -149,7 +148,7 @@ def eval_tagging_scores(gt_actions, pred_actions):
     cum_fp = np.cumsum(fp).astype(np.float32)
     rec = cum_tp / np.maximum(len(gt_triplets), np.finfo(np.float32).eps)
     prec = cum_tp / np.maximum(cum_tp + cum_fp, np.finfo(np.float32).eps)
-    print(prec, rec, hit_scores)
+    # print(prec, rec, hit_scores)
     return prec, rec, hit_scores
 
 
@@ -198,20 +197,21 @@ def eval_visual_action(groundtruth, prediction, viou_threshold=0.5,
     with open(prediction, 'r') as pred_f:
         prediction = json.load(pred_f)
 
+    # find the groundtruth json file
+    with open(os.path.join(groundtruth, 'gt_vid_path.json'), 'r') as dict_in_f:
+        gt_vid_path_json = json.load(dict_in_f)
+
     process_index = 0
     all_videos_num = len(prediction['results'].keys())
     for each_vid_id in prediction['results'].keys():
         process_index += 1
         print("Now is evaluating: {}, process: {}/{}".format(each_vid_id, process_index, all_videos_num))
-        # find the groundtruth json file
-        with open(os.path.join(groundtruth, 'gt_vid_path.json'), 'r') as dict_in_f:
-            gt_vid_path_json = json.load(dict_in_f)
 
         # get groundtruth
         with open(os.path.join(groundtruth, gt_vid_path_json[each_vid_id]), 'r') as gt_f:
-            groundtruth = json.load(gt_f)
+            groundtruth_json = json.load(gt_f)
 
-        gt_version = groundtruth['version']
+        gt_version = groundtruth_json['version']
         pred_version = prediction['version']
 
         if gt_version != pred_version:
@@ -220,14 +220,14 @@ def eval_visual_action(groundtruth, prediction, viou_threshold=0.5,
             sys.exit(0)
 
         gt_actions = []
-        for each_ins in groundtruth['relation_instances']:
+        for each_ins in groundtruth_json['relation_instances']:
 
             begin_fid = each_ins['begin_fid']
             end_fid = each_ins['end_fid']
 
             each_ins_trajectory = []
             # end_fid += 1
-            for each_traj in groundtruth['trajectories'][begin_fid:end_fid]:
+            for each_traj in groundtruth_json['trajectories'][begin_fid:end_fid]:
                 for each_traj_obj in each_traj:
                     if each_traj_obj['tid'] == each_ins['subject_tid']:
                         each_traj_frame = [
@@ -291,16 +291,93 @@ def eval_visual_action(groundtruth, prediction, viou_threshold=0.5,
     return mAP, rec_at_n, mprec_at_n
 
 
+def trans_gt_2_subm_4mat(groundtruth_json_path):
+    with open(groundtruth_json_path, 'r') as gt_json_f:
+        gt_json = json.load(gt_json_f)
+
+    gt_actions = []
+    for each_ins in gt_json['relation_instances']:
+
+        begin_fid = each_ins['begin_fid']
+        end_fid = each_ins['end_fid']
+
+        each_ins_trajectory = []
+        # end_fid += 1
+        for each_traj in gt_json['trajectories'][begin_fid:end_fid]:
+            for each_traj_obj in each_traj:
+                if each_traj_obj['tid'] == each_ins['subject_tid']:
+                    each_traj_frame = [
+                        each_traj_obj['bbox']['xmin'],
+                        each_traj_obj['bbox']['ymin'],
+                        each_traj_obj['bbox']['xmax'],
+                        each_traj_obj['bbox']['ymax']
+                    ]
+                    each_ins_trajectory.append(each_traj_frame)
+
+        each_ins_action = {
+            "category": each_ins['predicate'],
+            "score": random.random(),
+            "duration": [begin_fid, end_fid],
+            "trajectory": each_ins_trajectory
+        }
+
+        gt_actions.append(each_ins_action)
+
+    submiss_4mat = {
+        "version": "VERSION 1.0",
+        "results": {
+            gt_json['video_id']: gt_actions
+        },
+        "external_data": {
+            "used": True,
+            "details": "First fully-connected layer from VGG-16 pre-trained on ILSVRC-2012 training set"
+        }
+    }
+    with open(groundtruth_json_path[:-5] + '_sub.json', 'w+') as out_f:
+        out_f.write(json.dumps(submiss_4mat))
+
+
+def merge_gt_sub_4mat(gt_sub_4mat_path_list):
+    results = {}
+    for each_gt_path in gt_sub_4mat_path_list:
+        with open(each_gt_path, 'r') as each_gt_f:
+            each_gt_json = json.load(each_gt_f)
+            video_id = each_gt_path.split('/')[-1][:-9]
+            results[video_id] = each_gt_json['results'][video_id]
+    # print(results.keys())
+    merge_json = {
+        "version": "VERSION 1.0",
+        "results": results,
+        "external_data": {
+            "used": True,
+            "details": "First fully-connected layer from VGG-16 pre-trained on ILSVRC-2012 training set"
+        }
+    }
+    with open(gt_sub_4mat_path_list[0][:-5] + '_merge.json', 'w+') as out_f:
+        out_f.write(json.dumps(merge_json))
+
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Video visual action evaluation.')
-    parser.add_argument('groundtruth_dir', type=str, help='Groundtruth json files diretory, e.g. '
-                                                          '\'/home/daivd/PycharmProjects/VORD/validation/\'')
-    parser.add_argument('prediction_file', type=str, help='Prediction json file (submission format)')
-    args = parser.parse_args()
+    # trans_gt_2_subm_4mat('/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/11566930393.json')
+    # merge_gt_sub_4mat(['/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub.json',
+    #                    '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/3598080384_sub.json',
+    #                    '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/11566930393_sub.json'])
 
-    gen_vid_path(args.groundtruth_dir)
+    # parser = argparse.ArgumentParser(description='Video visual action evaluation.')
+    # parser.add_argument('groundtruth_dir', type=str, help='Groundtruth json files diretory, e.g. '
+    #                                                       '\'/home/daivd/PycharmProjects/VORD/validation/\'')
+    # parser.add_argument('prediction_file', type=str, help='Prediction json file (submission format)')
+    # args = parser.parse_args()
+    #
+    # gen_vid_path(args.groundtruth_dir)
+    #
+    # mAP, rec_at_n, mprec_at_n = eval_visual_action(args.groundtruth_dir, args.prediction_file)
 
-    mAP, rec_at_n, mprec_at_n = eval_visual_action(args.groundtruth_dir, args.prediction_file)
+    gen_vid_path('/home/daivd/PycharmProjects/VORD/validation')
+    eval_visual_action('/home/daivd/PycharmProjects/VORD/validation/',
+                       '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub_merge.json')
 
-    # gen_vid_path('/home/daivd/PycharmProjects/VORD/validation')
-    # eval_visual_action('/home/daivd/PycharmProjects/VORD/validation/', 'test/task2/task2.json')
+    # with open('/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub_merge.json', 'r') as f:
+    #     json_s = json.load(f)
+    #     print(json_s['results']['2793806282'])
+

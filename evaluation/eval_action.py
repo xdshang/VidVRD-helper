@@ -363,19 +363,19 @@ if __name__ == '__main__':
     #                    '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/3598080384_sub.json',
     #                    '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/11566930393_sub.json'])
 
-    # parser = argparse.ArgumentParser(description='Video visual action evaluation.')
-    # parser.add_argument('groundtruth_dir', type=str, help='Groundtruth json files diretory, e.g. '
-    #                                                       '\'/home/daivd/PycharmProjects/VORD/validation/\'')
-    # parser.add_argument('prediction_file', type=str, help='Prediction json file (submission format)')
-    # args = parser.parse_args()
-    #
-    # gen_vid_path(args.groundtruth_dir)
-    #
-    # mAP, rec_at_n, mprec_at_n = eval_visual_action(args.groundtruth_dir, args.prediction_file)
+    parser = argparse.ArgumentParser(description='Video visual action evaluation.')
+    parser.add_argument('groundtruth_dir', type=str, help='Groundtruth json files diretory, e.g. '
+                                                          '\'/home/daivd/PycharmProjects/VORD/validation/\'')
+    parser.add_argument('prediction_file', type=str, help='Prediction json file (submission format)')
+    args = parser.parse_args()
 
-    gen_vid_path('/home/daivd/PycharmProjects/VORD/validation')
-    eval_visual_action('/home/daivd/PycharmProjects/VORD/validation/',
-                       '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub_merge.json')
+    gen_vid_path(args.groundtruth_dir)
+
+    mAP, rec_at_n, mprec_at_n = eval_visual_action(args.groundtruth_dir, args.prediction_file)
+
+    # gen_vid_path('/home/daivd/PycharmProjects/VORD/validation')
+    # eval_visual_action('/home/daivd/PycharmProjects/VORD/validation/',
+    #                    '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub_merge.json')
 
     # with open('/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub_merge.json', 'r') as f:
     #     json_s = json.load(f)

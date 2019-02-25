@@ -1,6 +1,8 @@
 import argparse
 import json
+import os
 import sys
+from collections import defaultdict
 
 import numpy as np
 
@@ -11,6 +13,19 @@ def viou(traj_1, duration_1, traj_2, duration_2):
     by a duration [fstart, fend) and a list of bounding
     boxes (i.e. traj) within the duration.
     """
+    exit_flag = False
+    if duration_1[1] - duration_1[0] + 1 != len(traj_1):
+        print("The duration of duration1({}) doesnt match the traj1 shape: ({})"
+              .format(duration_1, np.array(traj_1).shape))
+        exit_flag = True
+    # if duration_2[1] - duration_2[0] != len(traj_2):
+    #     print("The duration of duration2({}) doesnt match the traj2 shape: ({})"
+    #           .format(duration_2, np.array(traj_2).shape))
+    #     exit_flag = True
+
+    if exit_flag is True:
+        sys.exit(0)
+
     if duration_1[0] >= duration_2[1] or duration_1[1] <= duration_2[0]:
         return 0.
     elif duration_1[0] <= duration_2[0]:
@@ -138,131 +153,154 @@ def eval_tagging_scores(gt_actions, pred_actions):
     return prec, rec, hit_scores
 
 
+def gen_vid_path(gt_dir):
+    if os.path.isfile(os.path.join(gt_dir, 'gt_vid_path.json')):
+        print('The video_id_path already exists! ')
+    else:
+        files_num = 0
+        vid_path_dict = {}
+        for root, dirs, files in os.walk(gt_dir):
+            # for each_d in dirs:
+            #     print(os.path.join(root, each_d))
+            for each_f in files:
+                files_num += 1
+                # print(os.path.join(root, each_f))
+                with open(os.path.join(root, each_f), 'r') as in_f:
+                    each_json = json.load(in_f)
+                    vid_path_dict[each_json['video_id']] = each_json['video_path'].replace('mp4', 'json')
+        # print(files_num)
+        print(gt_dir)
+        with open(os.path.join(gt_dir, 'gt_vid_path.json'), 'w+') as out_f:
+            out_f.write(json.dumps(vid_path_dict))
+            print("The video_id_path is saved to {}".format(os.path.join(gt_dir, 'gt_vid_path.json')))
+
+
 def eval_visual_action(groundtruth, prediction, viou_threshold=0.5,
                        det_nreturns=[50, 100], tag_nreturns=[1, 5, 10]):
-    """ evaluate visual action detection and visual
-    action tagging.
     """
+    evaluate visual action detection and visual action tagging.
+    :param groundtruth: the dir of gt, e.g. groundtruth="/home/daivd/PycharmProjects/VORD/validation/"
+    :param prediction: the path of pred, e.g. prediction="test/task2/task2.json"
+    :param viou_threshold:
+    :param det_nreturns:
+    :param tag_nreturns:
+    :return:
+    """
+
     print('evaluating...')
 
-    gt_version = groundtruth['version']
-    pred_version = prediction['version']
-    if gt_version != pred_version:
-        print("The version of groundtruth({}) and prediction({}) are different!"
-              .format(gt_version, pred_version))
-        sys.exit(0)
+    video_ap = dict()
+    tot_scores = defaultdict(list)
+    tot_tp = defaultdict(list)
+    prec_at_n = defaultdict(list)
+    tot_gt_actions = 0
 
-    gt_video_id = groundtruth['video_id']
-    pred_video_id = list(prediction['results'].keys())[0]
-    if gt_video_id != pred_video_id:
-        print("The video id of groundtruth({}) and prediction({}) are different!"
-              .format(gt_video_id, pred_video_id))
-        sys.exit(0)
+    with open(prediction, 'r') as pred_f:
+        prediction = json.load(pred_f)
 
-    # get groundtruth
-    gt_actions = []
-    for each_ins in groundtruth['relation_instances']:
+    process_index = 0
+    all_videos_num = len(prediction['results'].keys())
+    for each_vid_id in prediction['results'].keys():
+        process_index += 1
+        print("Now is evaluating: {}, process: {}/{}".format(each_vid_id, process_index, all_videos_num))
+        # find the groundtruth json file
+        with open(os.path.join(groundtruth, 'gt_vid_path.json'), 'r') as dict_in_f:
+            gt_vid_path_json = json.load(dict_in_f)
 
-        begin_fid = each_ins['begin_fid']
-        end_fid = each_ins['end_fid']
+        # get groundtruth
+        with open(os.path.join(groundtruth, gt_vid_path_json[each_vid_id]), 'r') as gt_f:
+            groundtruth = json.load(gt_f)
 
-        each_ins_trajectory = []
-        # end_fid += 1
-        for each_traj in groundtruth['trajectories'][begin_fid:end_fid]:
-            for each_traj_obj in each_traj:
-                if each_traj_obj['tid'] == each_ins['subject_tid']:
-                    each_traj_frame = [
-                        each_traj_obj['bbox']['xmin'],
-                        each_traj_obj['bbox']['ymin'],
-                        each_traj_obj['bbox']['xmax'],
-                        each_traj_obj['bbox']['ymax']
-                    ]
-                    each_ins_trajectory.append(each_traj_frame)
+        gt_version = groundtruth['version']
+        pred_version = prediction['version']
 
-        each_ins_action = {
-            "category": each_ins['predicate'],
-            "duration": [begin_fid, end_fid],
-            "trajectory": each_ins_trajectory
-        }
+        if gt_version != pred_version:
+            print("The version of groundtruth({}) and prediction({}) are different!"
+                  .format(gt_version, pred_version))
+            sys.exit(0)
 
-        gt_actions.append(each_ins_action)
+        gt_actions = []
+        for each_ins in groundtruth['relation_instances']:
 
-    # print(json.dumps({"a": actions_instances}))
+            begin_fid = each_ins['begin_fid']
+            end_fid = each_ins['end_fid']
 
-    pred_actions = prediction['results'][pred_video_id]
+            each_ins_trajectory = []
+            # end_fid += 1
+            for each_traj in groundtruth['trajectories'][begin_fid:end_fid]:
+                for each_traj_obj in each_traj:
+                    if each_traj_obj['tid'] == each_ins['subject_tid']:
+                        each_traj_frame = [
+                            each_traj_obj['bbox']['xmin'],
+                            each_traj_obj['bbox']['ymin'],
+                            each_traj_obj['bbox']['xmax'],
+                            each_traj_obj['bbox']['ymax']
+                        ]
+                        each_ins_trajectory.append(each_traj_frame)
 
-    eval_tagging_scores(gt_actions, pred_actions)
+            each_ins_action = {
+                "category": each_ins['predicate'],
+                "duration": [begin_fid, end_fid],
+                "trajectory": each_ins_trajectory
+            }
 
-    eval_detection_scores(gt_actions, pred_actions, viou_threshold)
+            gt_actions.append(each_ins_action)
 
-    # video_ap = dict()
-    # tot_scores = defaultdict(list)
-    # tot_tp = defaultdict(list)
-    # prec_at_n = defaultdict(list)
-    # tot_gt_actions = 0
-    # for vid, gt_actions in groundtruth.items():
-    #     # predict_actions = prediction[vid]
-    #     # print(vid, predict_actions)
-    #     if vid == 'version':
-    #         continue
-    #     predict_actions = prediction['results'][gt_actions]
-    #     gt_actions = groundtruth['relation_instances']
-    #     det_prec, det_rec, det_scores = eval_detection_scores(
-    #         gt_actions, predict_actions, viou_threshold)
-    #     tag_prec, _, _ = eval_tagging_scores(gt_actions, predict_actions)
-    #     # record per video evaluation results
-    #     video_ap[vid] = voc_ap(det_rec, det_prec)
-    #     tp = np.isfinite(det_scores)
-    #     for nre in det_nreturns:
-    #         cut_off = min(nre, det_scores.size)
-    #         tot_scores[nre].append(det_scores[:cut_off])
-    #         tot_tp[nre].append(tp[:cut_off])
-    #     for nre in tag_nreturns:
-    #         cut_off = min(nre, tag_prec.size)
-    #         prec_at_n[nre].append(tag_prec[cut_off - 1])
-    #     tot_gt_actions += len(gt_actions)
-    # # calculate mean ap for detection
-    # mAP = np.mean(video_ap.values())
-    # # calculate recall for detection
-    # rec_at_n = dict()
-    # for nre in det_nreturns:
-    #     scores = np.concatenate(tot_scores[nre])
-    #     tps = np.concatenate(tot_tp[nre])
-    #     sort_indices = np.argsort(scores)[::-1]
-    #     tps = tps[sort_indices]
-    #     cum_tp = np.cumsum(tps).astype(np.float32)
-    #     rec = cum_tp / np.maximum(tot_gt_actions, np.finfo(np.float32).eps)
-    #     rec_at_n[nre] = rec[-1]
-    # # calculate mean precision for tagging
-    # mprec_at_n = dict()
-    # for nre in tag_nreturns:
-    #     mprec_at_n[nre] = np.mean(prec_at_n[nre])
-    # # print scores
-    # print('detection mAP (used in challenge): {}'.format(mAP))
-    # print('detection recall@50: {}'.format(rec_at_n[50]))
-    # print('detection recall@100: {}'.format(rec_at_n[100]))
-    # print('tagging precision@1: {}'.format(mprec_at_n[1]))
-    # print('tagging precision@5: {}'.format(mprec_at_n[5]))
-    # print('tagging precision@10: {}'.format(mprec_at_n[10]))
-    # return mAP, rec_at_n, mprec_at_n
+        predict_actions = prediction['results'][each_vid_id]
+
+        det_prec, det_rec, det_scores = eval_detection_scores(
+            gt_actions, predict_actions, viou_threshold)
+        tag_prec, _, _ = eval_tagging_scores(gt_actions, predict_actions)
+
+        # record per video evaluation results
+        video_ap[each_vid_id] = voc_ap(det_rec, det_prec)
+        tp = np.isfinite(det_scores)
+        for nre in det_nreturns:
+            cut_off = min(nre, det_scores.size)
+            tot_scores[nre].append(det_scores[:cut_off])
+            tot_tp[nre].append(tp[:cut_off])
+        for nre in tag_nreturns:
+            cut_off = min(nre, tag_prec.size)
+            prec_at_n[nre].append(tag_prec[cut_off - 1])
+        tot_gt_actions += len(gt_actions)
+
+    # calculate mean ap for detection
+    mAP = np.mean(list(video_ap.values()))
+    # calculate recall for detection
+    rec_at_n = dict()
+    for nre in det_nreturns:
+        scores = np.concatenate(tot_scores[nre])
+        tps = np.concatenate(tot_tp[nre])
+        sort_indices = np.argsort(scores)[::-1]
+        tps = tps[sort_indices]
+        cum_tp = np.cumsum(tps).astype(np.float32)
+        rec = cum_tp / np.maximum(tot_gt_actions, np.finfo(np.float32).eps)
+        rec_at_n[nre] = rec[-1]
+
+    # calculate mean precision for tagging
+    mprec_at_n = dict()
+    for nre in tag_nreturns:
+        mprec_at_n[nre] = np.mean(prec_at_n[nre])
+    # print scores
+    print('detection mAP (used in challenge): {}'.format(mAP))
+    print('detection recall@50: {}'.format(rec_at_n[50]))
+    print('detection recall@100: {}'.format(rec_at_n[100]))
+    print('tagging precision@1: {}'.format(mprec_at_n[1]))
+    print('tagging precision@5: {}'.format(mprec_at_n[5]))
+    print('tagging precision@10: {}'.format(mprec_at_n[10]))
+    return mAP, rec_at_n, mprec_at_n
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Video visual action evaluation.')
-    parser.add_argument('groundtruth_file', type=str, help=('Groundtruth json file (please'
-                                                            ' generate the file yourself or use the api provided in evaluate.py in the'
-                                                            ' repository https://github.com/xdshang/VidVRD-helper)'))
-    parser.add_argument('prediction_file', type=str, help='Prediction json file')
+    parser.add_argument('groundtruth_dir', type=str, help='Groundtruth json files diretory, e.g. '
+                                                          '\'/home/daivd/PycharmProjects/VORD/validation/\'')
+    parser.add_argument('prediction_file', type=str, help='Prediction json file (submission format)')
     args = parser.parse_args()
 
-    with open(args.groundtruth_file, 'r') as fin:
-        groundtruth_json = json.load(fin)
-    with open(args.prediction_file, 'r') as fin:
-        prediction_json = json.load(fin)
+    gen_vid_path(args.groundtruth_dir)
 
-    # with open('test/task2/3598080384.json', 'r') as gt_f:
-    #     groundtruth_json = json.load(gt_f)
-    # with open('test/task2/task2.json', 'r') as gt_f:
-    #     prediction_json = json.load(gt_f)
+    mAP, rec_at_n, mprec_at_n = eval_visual_action(args.groundtruth_dir, args.prediction_file)
 
-    mAP, rec_at_n, mprec_at_n = eval_visual_action(groundtruth_json, prediction_json)
+    # gen_vid_path('/home/daivd/PycharmProjects/VORD/validation')
+    # eval_visual_action('/home/daivd/PycharmProjects/VORD/validation/', 'test/task2/task2.json')

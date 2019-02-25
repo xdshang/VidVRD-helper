@@ -179,7 +179,7 @@ def eval_visual_action(groundtruth, prediction, viou_threshold=0.5,
     """
     evaluate visual action detection and visual action tagging.
     :param groundtruth: the dir of gt, e.g. groundtruth="/home/daivd/PycharmProjects/VORD/validation/"
-    :param prediction: the path of pred, e.g. prediction="test/task2/task2.json"
+    :param prediction: the path of pred, e.g. prediction="test/task2/3598080384_fks.json"
     :param viou_threshold:
     :param det_nreturns:
     :param tag_nreturns:
@@ -359,23 +359,23 @@ def merge_gt_sub_4mat(gt_sub_4mat_path_list):
 
 if __name__ == '__main__':
     # trans_gt_2_subm_4mat('/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/11566930393.json')
-    # merge_gt_sub_4mat(['/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub.json',
-    #                    '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/3598080384_sub.json',
-    #                    '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/11566930393_sub.json'])
+    merge_gt_sub_4mat(['/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub.json',
+                       '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/3598080384_fks.json',
+                       '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/11566930393_sub.json'])
 
-    parser = argparse.ArgumentParser(description='Video visual action evaluation.')
-    parser.add_argument('groundtruth_dir', type=str, help='Groundtruth json files diretory, e.g. '
-                                                          '\'/home/daivd/PycharmProjects/VORD/validation/\'')
-    parser.add_argument('prediction_file', type=str, help='Prediction json file (submission format)')
-    args = parser.parse_args()
+    # parser = argparse.ArgumentParser(description='Video visual action evaluation.')
+    # parser.add_argument('groundtruth_dir', type=str, help='Groundtruth json files diretory, e.g. '
+    #                                                       '\'/home/daivd/PycharmProjects/VORD/validation/\'')
+    # parser.add_argument('prediction_file', type=str, help='Prediction json file (submission format)')
+    # args = parser.parse_args()
+    #
+    # gen_vid_path(args.groundtruth_dir)
+    #
+    # mAP, rec_at_n, mprec_at_n = eval_visual_action(args.groundtruth_dir, args.prediction_file)
 
-    gen_vid_path(args.groundtruth_dir)
-
-    mAP, rec_at_n, mprec_at_n = eval_visual_action(args.groundtruth_dir, args.prediction_file)
-
-    # gen_vid_path('/home/daivd/PycharmProjects/VORD/validation')
-    # eval_visual_action('/home/daivd/PycharmProjects/VORD/validation/',
-    #                    '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub_merge.json')
+    gen_vid_path('/home/daivd/PycharmProjects/VORD/validation')
+    eval_visual_action('/home/daivd/PycharmProjects/VORD/validation/',
+                       '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub_merge.json')
 
     # with open('/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub_merge.json', 'r') as f:
     #     json_s = json.load(f)

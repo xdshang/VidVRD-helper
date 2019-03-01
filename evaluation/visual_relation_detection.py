@@ -1,7 +1,7 @@
 from collections import defaultdict
 import numpy as np
 
-from common import voc_ap
+from .common import voc_ap
 
 
 def viou(traj_1, duration_1, traj_2, duration_2):

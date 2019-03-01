@@ -10,7 +10,7 @@ import json
 import numpy as np
 from argparse import ArgumentParser
 
-from common import voc_ap
+from .common import voc_ap
 
 
 def IoU(bbox_1, bbox_2):
@@ -77,7 +77,7 @@ def evaluate(pred, gt, use_07_metric=True, thresh_t=0.5):
     Evaluate the predictions
     """
     gt_classes = set()
-    for tracks in gt:
+    for tracks in gt.values():
         for traj in tracks:
             gt_classes.add(traj['category'])
     gt_class_num = len(gt_classes)

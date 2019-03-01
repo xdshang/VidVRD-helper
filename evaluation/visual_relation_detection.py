@@ -1,6 +1,8 @@
 from collections import defaultdict
 import numpy as np
 
+from common import voc_ap
+
 
 def viou(traj_1, duration_1, traj_2, duration_2):
     """ compute the voluminal Intersection over Union
@@ -44,37 +46,6 @@ def viou(traj_1, duration_1, traj_2, duration_2):
     for i in range(len(traj_2)):
         v2 += (traj_2[i][2] - traj_2[i][0] + 1) * (traj_2[i][3] - traj_2[i][1] + 1)
     return float(v_overlap) / (v1 + v2 - v_overlap)
-
-
-def voc_ap(rec, prec, use_07_metric=False):
-    """ ap = voc_ap(rec, prec, [use_07_metric])
-    Compute VOC ap given precision and recall.
-    If use_07_metric is true, uses the
-    VOC 07 11 point method (default:False).
-    """
-    if use_07_metric:
-        # 11 point metric
-        ap = 0.
-        for t in np.arange(0., 1.1, 0.1):
-            if np.sum(rec >= t) == 0:
-                p = 0
-            else:
-                p = np.max(prec[rec >= t])
-            ap = ap + p / 11.
-    else:
-        # correct ap calculation
-        # first append sentinel values at the end
-        mrec = np.concatenate(([0.], rec, [1.]))
-        mpre = np.concatenate(([0.], prec, [0.]))
-        # compute the precision envelope
-        for i in range(mpre.size - 1, 0, -1):
-            mpre[i - 1] = np.maximum(mpre[i - 1], mpre[i])
-        # to calculate area under PR curve, look for points
-        # where X axis (recall) changes value
-        i = np.where(mrec[1:] != mrec[:-1])[0]
-        # and sum (\Delta recall) * prec
-        ap = np.sum((mrec[i + 1] - mrec[i]) * mpre[i + 1])
-    return ap
 
 
 def eval_detection_scores(gt_relations, pred_relations, viou_threshold):
@@ -131,7 +102,7 @@ def eval_tagging_scores(gt_relations, pred_relations):
     return prec, rec, hit_scores
 
 
-def eval_visual_relation(groundtruth, prediction, viou_threshold=0.5,
+def evaluate(groundtruth, prediction, viou_threshold=0.5,
         det_nreturns=[50, 100], tag_nreturns=[1, 5, 10]):
     """ evaluate visual relation detection and visual 
     relation tagging.
@@ -189,15 +160,15 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='Video visual relation evaluation.')
-    parser.add_argument('groundtruth_file', type=str, help=('Groundtruth json file (please'
-            ' generate the file yourself or use the api provided in evaluate.py in the'
-            ' repository https://github.com/xdshang/VidVRD-helper)'))
-    parser.add_argument('prediction_file', type=str, help='Prediction json file')
+    parser.add_argument('--groundtruth', dest='gt_file', type=str, required=True,
+            help=('Groundtruth json file (please generate the file yourself',
+                ' referring to ../dataset/dataset.py:get_relation_insts())'))
+    parser.add_argument('--prediction', dest='pred_file', type=str, required=True, help='prediction file')
     args = parser.parse_args()
 
-    with open(args.groundtruth_file, 'r') as fin:
-        groundtruth_json = json.load(fin)
-    with open(args.prediction_file, 'r') as fin:
-        prediction_json = json.load(fin)
+    with open(args.gt_file, 'r') as fin:
+        gt = json.load(fin)
+    with open(args.pred_file, 'r') as fin:
+        pred = json.load(fin)
 
-    mAP, rec_at_n, mprec_at_n = eval_visual_relation(groundtruth_json, prediction_json)
+    mAP, rec_at_n, mprec_at_n = evaluate(gt, pred)

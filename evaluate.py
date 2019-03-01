@@ -1,34 +1,35 @@
 import json
 import argparse
-from dataset import Dataset
+
+from dataset import VidVRD, VidOR
+from evaluation import eval_video_object, eval_action, eval_visual_relation
 
 
-def eval_video_object(dataset, prediction):
-    from evaluation import eval_video_object
+def evaluate_object(dataset, split, prediction):
     print('- evaluating video objects')
-    raise NotImplementedError
+    groundtruth = dict()
+    for vid in dataset.get_index(split):
+        groundtruth[vid] = dataset.get_object_insts(vid)
+    mean_ap, ap_class = eval_video_object(prediction, groundtruth)
 
 
-def eval_action(dataset, prediction):
-    from evaluation import eval_action
+def evaluate_action(dataset, split, prediction):
     print('- evaluating actions')
     raise NotImplementedError
 
 
-def eval_visual_relation(dataset, prediction):
-    from evaluation import eval_visual_relation
-    # evaluate
+def evaluate_relation(dataset, split, prediction):
     print('- evaluating visual relations')
     groundtruth = dict()
-    for vid in dataset.get_index('test'):
+    for vid in dataset.get_index(split):
         groundtruth[vid] = dataset.get_relation_insts(vid)
     mAP, rec_at_n, mprec_at_n = eval_visual_relation(groundtruth, prediction)
     # evaluate in zero-shot setting
     print('-- zero-shot')
-    zeroshot_triplets = dataset.get_triplets('test').difference(
+    zeroshot_triplets = dataset.get_triplets(split).difference(
             dataset.get_triplets('train'))
     zeroshot_groundtruth = dict()
-    for vid in dataset.get_index('test'):
+    for vid in dataset.get_index(split):
         gt_relations = dataset.get_relation_insts(vid)
         zs_gt_relations = []
         for r in gt_relations:
@@ -42,19 +43,27 @@ def eval_visual_relation(dataset, prediction):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Video visual relation evaluation.')
-    parser.add_argument('prediction_file', type=str, help='Prediction json file')
+    parser.add_argument('dataset', type=str, help='the dataset name for evaluation')
+    parser.add_argument('split', type=str, help='the split name for evaluation')
+    parser.add_argument('prediction', type=str, help='Prediction json file')
     parser.add_argument("--object", action="store_true", help="whether to evaluate video objects")
     parser.add_argument("--action", action="store_true", help="whether to evaluate actions")
     parser.add_argument("--relation", action="store_true", help="whether to evaluate visual relations")
     args = parser.parse_args()
 
-    dataset = Dataset()
-    with open(args.prediction_file, 'r') as fin:
+    if args.dataset=='vidvrd':
+        dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', [args.split])
+    elif args.dataset=='vidor':
+        dataset = VidOR('../vidor/annotation', '../vidor/vidor', [args.split], low_memory=True)
+    else:
+        raise Exception('Unknown dataset {}'.format(args.dataset))
+
+    with open(args.prediction, 'r') as fin:
         prediction_json = json.load(fin)
 
-    if args.action:
-        eval_video_object(dataset, prediction_json)
     if args.object:
-        eval_action(dataset, prediction_json)
+        evaluate_object(dataset, args.split, prediction_json)
+    if args.action:
+        evaluate_action(dataset, args.split, prediction_json)
     if args.relation:
-        eval_visual_relation(dataset, prediction_json)
+        evaluate_relation(dataset, args.split, prediction_json)

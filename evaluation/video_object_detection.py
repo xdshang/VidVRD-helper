@@ -15,7 +15,7 @@ from common import voc_ap
 
 def IoU(bbox_1, bbox_2):
     """
-    get IoU value of two bboxes
+    Get IoU value of two bboxes
     :param bbox_1:
     :param bbox_2:
     :return: IoU
@@ -40,7 +40,7 @@ def IoU(bbox_1, bbox_2):
 
 def trajectory_overlap(gt_trajs, pred_traj):
     """
-    calculate overlap among trajectories
+    Calculate overlap among trajectories
     :param gt_trajs:
     :param pred_traj:
     :param thresh_s:
@@ -76,6 +76,12 @@ def evaluate(pred, gt, use_07_metric=True, thresh_t=0.5):
     """
     Evaluate the predictions
     """
+    gt_classes = set()
+    for tracks in gt:
+        for traj in tracks:
+            gt_classes.add(traj['category'])
+    gt_class_num = len(gt_classes)
+
     result_class = dict()
     results = pred['results']
     for vid, tracks in results.items():
@@ -86,9 +92,11 @@ def evaluate(pred, gt, use_07_metric=True, thresh_t=0.5):
                 result_class[traj['category']].append([vid, traj['score'], traj['trajectory']])
 
     ap_class = dict()
-    print('Computing average precision AP...')
-    for c in result_class:
-        # if c != 'adult': continue
+    print('Computing average precision AP over {} classes...'.format(gt_class_num))
+    for c in gt_classes:
+        if c not in result_class: 
+            ap_class[c] = 0.
+            continue
         npos = 0
         class_recs = {}
 
@@ -144,7 +152,7 @@ def evaluate(pred, gt, use_07_metric=True, thresh_t=0.5):
     for i, (cls, ap) in enumerate(ap_class):
         print('{}.{}\t{:.4f}'.format(i, cls, ap))
         total_ap += ap
-    mean_ap = total_ap / len(ap_class)
+    mean_ap = total_ap / gt_class_num 
     print('=' * 25)
     print('mAP\t{:.4f}'.format(mean_ap))
 

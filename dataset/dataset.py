@@ -67,6 +67,9 @@ class Dataset(object):
     
     def get_video_path(self, vid):
         raise NotImplementedError
+    
+    def _get_action_predicates(self):
+        raise NotImplementedError
 
     def get_object_num(self):
         return len(self.soid2so)
@@ -130,6 +133,37 @@ class Dataset(object):
                 'trajectory': traj[tid]
             })
         return object_insts
+
+    def get_action_insts(self, vid, no_traj=False):
+        """
+        get the action instances labeled in a video,
+        no_traj=True will not include trajectories, which is
+        faster.
+        """
+        anno = self.get_anno(vid)
+        action_insts = []
+        for each_ins in anno['relation_instances']:
+            begin_fid = each_ins['begin_fid']
+            end_fid = each_ins['end_fid']
+            each_ins_trajectory = []
+            # end_fid += 1
+            for each_traj in anno['trajectories'][begin_fid:end_fid]:
+                for each_traj_obj in each_traj:
+                    if each_traj_obj['tid'] == each_ins['subject_tid']:
+                        each_traj_frame = (
+                            each_traj_obj['bbox']['xmin'],
+                            each_traj_obj['bbox']['ymin'],
+                            each_traj_obj['bbox']['xmax'],
+                            each_traj_obj['bbox']['ymax']
+                        )
+                        each_ins_trajectory.append(each_traj_frame)
+            each_ins_action = {
+                "category": each_ins['predicate'],
+                "duration": [begin_fid, end_fid],
+                "trajectory": each_ins_trajectory
+            }
+            action_insts.append(each_ins_action)
+        return action_insts
 
     def get_relation_insts(self, vid, no_traj=False):
         """

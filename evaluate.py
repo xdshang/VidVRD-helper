@@ -15,7 +15,10 @@ def evaluate_object(dataset, split, prediction):
 
 def evaluate_action(dataset, split, prediction):
     print('- evaluating actions')
-    raise NotImplementedError
+    groundtruth = dict()
+    for vid in dataset.get_index(split):
+        groundtruth[vid] = dataset.get_action_insts(vid)
+    mean_ap, ap_class = eval_action(prediction, groundtruth)
 
 
 def evaluate_relation(dataset, split, prediction):

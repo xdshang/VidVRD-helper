@@ -10,32 +10,7 @@ import json
 import numpy as np
 from argparse import ArgumentParser
 
-from .common import voc_ap
-
-
-def IoU(bbox_1, bbox_2):
-    """
-    Get IoU value of two bboxes
-    :param bbox_1:
-    :param bbox_2:
-    :return: IoU
-    """
-    w_1 = bbox_1[2] - bbox_1[0] + 1
-    h_1 = bbox_1[3] - bbox_1[1] + 1
-    w_2 = bbox_2[2] - bbox_2[0] + 1
-    h_2 = bbox_2[3] - bbox_2[1] + 1
-    area_1 = w_1 * h_1
-    area_2 = w_2 * h_2
-
-    overlap_bbox = (max(bbox_1[0], bbox_2[0]), max(bbox_1[1], bbox_2[1]),
-                    min(bbox_1[2], bbox_2[2]), min(bbox_1[3], bbox_2[3]))
-    overlap_w = max(0, (overlap_bbox[2] - overlap_bbox[0] + 1))
-    overlap_h = max(0, (overlap_bbox[3] - overlap_bbox[1] + 1))
-
-    overlap_area = overlap_w * overlap_h
-    union_area = area_1 + area_2 - overlap_area
-    IoU = overlap_area * 1.0 / union_area
-    return IoU
+from .common import voc_ap, iou
 
 
 def trajectory_overlap(gt_trajs, pred_traj):
@@ -55,7 +30,7 @@ def trajectory_overlap(gt_trajs, pred_traj):
         for i, fid in enumerate(gt_traj):
             if fid not in pred_traj:
                 continue
-            sIoU = IoU(gt_traj[fid], pred_traj[fid])
+            sIoU = iou(gt_traj[fid], pred_traj[fid])
             if sIoU >= thresh_s[0]:
                 top1 += 1
                 if sIoU >= thresh_s[1]:

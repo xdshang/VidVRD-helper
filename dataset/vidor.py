@@ -25,6 +25,19 @@ class VidOR(DatasetV1):
         assert len(anno_files)>0, 'No annotation file found. Please check if the directory is correct.'
         return anno_files
 
+    def _get_action_predicates(self):
+        actions = [
+            'watch','bite','kiss','lick','smell','caress','knock','pat',
+            'point_to','squeeze','hold','press','touch','hit','kick',
+            'lift','throw','wave','carry','grab','release','pull',
+            'push','hug','lean_on','ride','chase','get_on','get_off',
+            'hold_hand_of','shake_hand_with','wave_hand_to','speak_to','shout_at','feed',
+            'open','close','use','cut','clean','drive','play(instrument)',
+        ]
+        for action in actions:
+            assert action in self.pred2pid
+        return actions
+
     def get_video_path(self, vid):
         """
         True if the directory videos uses imagenet struture

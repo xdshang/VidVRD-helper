@@ -1,14 +1,11 @@
-import argparse
 import json
 import os
-import sys
 import random
-from collections import defaultdict
-from dataset.dataset import DatasetV1
 from argparse import ArgumentParser
+
 import numpy as np
 
-from .common import voc_ap, viou, iou
+from .common import voc_ap, viou
 
 
 def eval_detection_scores(gt_actions, pred_actions, viou_threshold):
@@ -76,7 +73,6 @@ def evaluate(prediction, groundtruth, viou_threshold=0.5):
             ap_class[each_action] = 0.
             continue
 
-        class_recs = {}
         groundtruth_actions = dict()
         for each_vid in groundtruth:
             # get groundtruth actions

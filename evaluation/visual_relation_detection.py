@@ -1,51 +1,7 @@
 from collections import defaultdict
 import numpy as np
 
-from .common import voc_ap
-
-
-def viou(traj_1, duration_1, traj_2, duration_2):
-    """ compute the voluminal Intersection over Union
-    for two trajectories, each of which is represented
-    by a duration [fstart, fend) and a list of bounding
-    boxes (i.e. traj) within the duration.
-    """
-    if duration_1[0] >= duration_2[1] or duration_1[1] <= duration_2[0]:
-        return 0.
-    elif duration_1[0] <= duration_2[0]:
-        head_1 = duration_2[0] - duration_1[0]
-        head_2 = 0
-        if duration_1[1] < duration_2[1]:
-            tail_1 = duration_1[1] - duration_1[0]
-            tail_2 = duration_1[1] - duration_2[0]
-        else:
-            tail_1 = duration_2[1] - duration_1[0]
-            tail_2 = duration_2[1] - duration_2[0]
-    else:
-        head_1 = 0
-        head_2 = duration_1[0] - duration_2[0]
-        if duration_1[1] < duration_2[1]:
-            tail_1 = duration_1[1] - duration_1[0]
-            tail_2 = duration_1[1] - duration_2[0]
-        else:
-            tail_1 = duration_2[1] - duration_1[0]
-            tail_2 = duration_2[1] - duration_2[0]
-    v_overlap = 0
-    for i in range(tail_1 - head_1):
-        roi_1 = traj_1[head_1 + i]
-        roi_2 = traj_2[head_2 + i]
-        left = max(roi_1[0], roi_2[0])
-        top = max(roi_1[1], roi_2[1])
-        right = min(roi_1[2], roi_2[2])
-        bottom = min(roi_1[3], roi_2[3])
-        v_overlap += (right - left + 1) * (bottom - top + 1)
-    v1 = 0
-    for i in range(len(traj_1)):
-        v1 += (traj_1[i][2] - traj_1[i][0] + 1) * (traj_1[i][3] - traj_1[i][1] + 1)
-    v2 = 0
-    for i in range(len(traj_2)):
-        v2 += (traj_2[i][2] - traj_2[i][0] + 1) * (traj_2[i][3] - traj_2[i][1] + 1)
-    return float(v_overlap) / (v1 + v2 - v_overlap)
+from .common import voc_ap, viou
 
 
 def eval_detection_scores(gt_relations, pred_relations, viou_threshold):

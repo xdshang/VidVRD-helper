@@ -67,6 +67,9 @@ class Dataset(object):
     
     def get_video_path(self, vid):
         raise NotImplementedError
+    
+    def _get_action_predicates(self):
+        raise NotImplementedError
 
     def get_object_num(self):
         return len(self.soid2so)
@@ -130,6 +133,36 @@ class Dataset(object):
                 'trajectory': traj[tid]
             })
         return object_insts
+
+    def get_action_insts(self, vid):
+        """
+        get the action instances labeled in a video
+        """
+        anno = self.get_anno(vid)
+        action_insts = []
+        actions = self._get_action_predicates()
+        for each_ins in anno['relation_instances']:
+            if each_ins['predicate'] in actions:
+                begin_fid = each_ins['begin_fid']
+                end_fid = each_ins['end_fid']
+                each_ins_trajectory = []
+                for each_traj in anno['trajectories'][begin_fid:end_fid]:
+                    for each_traj_obj in each_traj:
+                        if each_traj_obj['tid'] == each_ins['subject_tid']:
+                            each_traj_frame = (
+                                each_traj_obj['bbox']['xmin'],
+                                each_traj_obj['bbox']['ymin'],
+                                each_traj_obj['bbox']['xmax'],
+                                each_traj_obj['bbox']['ymax']
+                            )
+                            each_ins_trajectory.append(each_traj_frame)
+                each_ins_action = {
+                    "category": each_ins['predicate'],
+                    "duration": (begin_fid, end_fid),
+                    "trajectory": each_ins_trajectory
+                }
+                action_insts.append(each_ins_action)
+        return action_insts
 
     def get_relation_insts(self, vid, no_traj=False):
         """

@@ -52,7 +52,7 @@ if __name__ == '__main__':
     if args.dataset=='vidvrd':
         dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', [args.split])
     elif args.dataset=='vidor':
-        dataset = VidOR('../vidor/annotation', '../vidor/vidor', [args.split], low_memory=True)
+        dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/vidor', [args.split], low_memory=True)
     else:
         raise Exception('Unknown dataset {}'.format(args.dataset))
 

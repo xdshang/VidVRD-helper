@@ -49,7 +49,7 @@ class VidOR(DatasetV1):
 
 if __name__ == '__main__':
     """
-    To generate a single JSON groundtruth of vidor validation set,
+    To generate a single JSON groundtruth file for specific split and task,
     run this script from the parent directory, for example, 
     python -m dataset.vidor validation object ~/vidor_gt_val_object.json
     """
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # to load the trainning set without low memory mode for faster processing, you need sufficient large RAM
-    dataset = VidOR('../vidor/annotation', '../vidor/vidor', ['training', 'validation'], low_memory=True)
+    dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/vidor', ['training', 'validation'], low_memory=True)
     index = dataset.get_index(args.split)
 
     gts = dict()

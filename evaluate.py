@@ -6,23 +6,20 @@ from evaluation import eval_video_object, eval_action, eval_visual_relation
 
 
 def evaluate_object(dataset, split, prediction):
-    print('- evaluating video objects')
     groundtruth = dict()
     for vid in dataset.get_index(split):
         groundtruth[vid] = dataset.get_object_insts(vid)
-    mean_ap, ap_class = eval_video_object(prediction, groundtruth)
+    mean_ap, ap_class = eval_video_object(groundtruth, prediction)
 
 
 def evaluate_action(dataset, split, prediction):
-    print('- evaluating actions')
     groundtruth = dict()
     for vid in dataset.get_index(split):
         groundtruth[vid] = dataset.get_action_insts(vid)
-    mean_ap, ap_class = eval_action(prediction, groundtruth)
+    mean_ap, ap_class = eval_action(groundtruth, prediction)
 
 
 def evaluate_relation(dataset, split, prediction):
-    print('- evaluating visual relations')
     groundtruth = dict()
     for vid in dataset.get_index(split):
         groundtruth[vid] = dataset.get_relation_insts(vid)
@@ -45,13 +42,11 @@ def evaluate_relation(dataset, split, prediction):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Video visual relation evaluation.')
+    parser = argparse.ArgumentParser(description='Evaluate a set of tasks related to video relation understanding.')
     parser.add_argument('dataset', type=str, help='the dataset name for evaluation')
     parser.add_argument('split', type=str, help='the split name for evaluation')
-    parser.add_argument('prediction', type=str, help='Prediction json file')
-    parser.add_argument("--object", action="store_true", help="whether to evaluate video objects")
-    parser.add_argument("--action", action="store_true", help="whether to evaluate actions")
-    parser.add_argument("--relation", action="store_true", help="whether to evaluate visual relations")
+    parser.add_argument('task', choices=['object', 'action', 'relation'], help='which task to evaluate')
+    parser.add_argument('prediction', type=str, help='Corresponding prediction JSON file')
     args = parser.parse_args()
 
     if args.dataset=='vidvrd':
@@ -61,12 +56,14 @@ if __name__ == '__main__':
     else:
         raise Exception('Unknown dataset {}'.format(args.dataset))
 
+    print('Loading prediction from {}'.format(args.prediction))
     with open(args.prediction, 'r') as fin:
-        prediction_json = json.load(fin)
+        pred = json.load(fin)
+    print('Number of videos in prediction: {}'.format(len(pred['results'])))
 
-    if args.object:
-        evaluate_object(dataset, args.split, prediction_json)
-    if args.action:
-        evaluate_action(dataset, args.split, prediction_json)
-    if args.relation:
-        evaluate_relation(dataset, args.split, prediction_json)
+    if args.task=='object':
+        evaluate_object(dataset, args.split, pred)
+    elif args.task=='action':
+        evaluate_action(dataset, args.split, pred)
+    elif args.task=='relation':
+        evaluate_relation(dataset, args.split, pred)

@@ -11,7 +11,7 @@ python evaluate.py [dataset_name] [split_name] [task_name] [path_to_prediction_j
 ```
 
 #### Prediction JSON Format for Visual Relation Detection
-```json
+```json5
 {
     "version": "VERSION 1.0",
     "results": {

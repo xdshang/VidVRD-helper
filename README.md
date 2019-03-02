@@ -3,7 +3,6 @@
 This repository contains some helper functions for the convenient usage of
 [VidVRD dataset](http://lms.comp.nus.edu.sg/research/VidVRD.html)
 and a [Grand Challenge dataset](http://lms.comp.nus.edu.sg/research/dataset.html). 
-
 It also contains scripts for evaluating several relevant tasks, i.e.
 *video object detection*, *action detection* and *visual relation detection*.
 

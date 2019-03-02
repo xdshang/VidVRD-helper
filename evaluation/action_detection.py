@@ -8,7 +8,7 @@ from dataset.dataset import DatasetV1
 from argparse import ArgumentParser
 import numpy as np
 
-from .common import voc_ap, viou
+from .common import voc_ap, viou, iou
 
 
 def eval_detection_scores(gt_actions, pred_actions, viou_threshold):
@@ -20,7 +20,7 @@ def eval_detection_scores(gt_actions, pred_actions, viou_threshold):
         k_max = -1
         for gt_idx, gt_action in enumerate(gt_actions):
             if not gt_detected[gt_idx] \
-                    and pred_action['category'] == gt_action['category']:
+                    and pred_action['id'] == gt_action['id']:
                 ov = viou(pred_action['trajectory'], pred_action['duration'],
                           gt_action['trajectory'], gt_action['duration'])
                 if ov >= viou_threshold and ov > ov_max:
@@ -54,76 +54,62 @@ def evaluate(prediction, groundtruth, viou_threshold=0.5):
             gt_classes.add(traj['category'])
     gt_class_num = len(gt_classes)
 
-    prediction_actions = set()
-    prediction_vids = []
-    for each_vid, traj_list in prediction['results'].items():
-        prediction_vids.append(each_vid)
-        for each_traj_ins in traj_list:
-            prediction_actions.add(each_traj_ins['category'])
+    prediction_actions = dict()
+    for vid, tracks in prediction['results'].items():
+        for traj in tracks:
+            pred_action = {
+                "id": vid,
+                "score": traj['score'],
+                "duration": traj['duration'],
+                "trajectory": traj['trajectory']
+            }
+            if traj['category'] not in prediction_actions.keys():
+                prediction_actions[traj['category']] = [pred_action]
+            else:
+                prediction_actions[traj['category']].append(pred_action)
 
     ap_class = dict()
     print('Computing average precision AP over {} classes...'.format(gt_class_num))
 
     for each_action in gt_classes:
-        if each_action not in prediction_actions:
+        if each_action not in prediction_actions.keys():
             ap_class[each_action] = 0.
             continue
 
-        for vid, gt_relations in groundtruth.items():
-            if vid in prediction_vids:
-                predict_actions = prediction['results'][vid]
-                det_prec, det_rec, det_scores = eval_detection_scores(
-                    gt_relations, predict_actions, viou_threshold)
+        class_recs = {}
+        groundtruth_actions = dict()
+        for each_vid in groundtruth:
+            # get groundtruth actions
+            for each_gt_traj in groundtruth[each_vid]:
+                if each_gt_traj['category'] == each_action:
+                    gt_action = {
+                        "id": each_vid,
+                        "duration": each_gt_traj['duration'],
+                        "trajectory": each_gt_traj['trajectory']
+                    }
+                    if each_action not in groundtruth_actions.keys():
+                        groundtruth_actions[each_action] = [gt_action]
+                    else:
+                        groundtruth_actions[each_action].append(gt_action)
 
-                # record per action evaluation results
-                ap_class[each_action] = voc_ap(det_rec, det_prec)
+        pred_actions = prediction_actions[each_action]
+        gt_actions = groundtruth_actions[each_action]
+
+        det_prec, det_rec, det_scores = eval_detection_scores(
+            gt_actions, pred_actions, viou_threshold)
+
+        ap_class[each_action] = voc_ap(det_rec, det_prec)
 
     # compute mean ap and print
     print('=' * 25)
-    ap_class = sorted(ap_class.items(), key=lambda ap_class: ap_class[0])
-    total_ap = 0.
-    for i, (cls, ap) in enumerate(ap_class):
+    ap_class_l = sorted(ap_class.items(), key=lambda ap_class: ap_class[0])
+    for i, (cls, ap) in enumerate(ap_class_l):
         print('{}.{}\t{:.4f}'.format(i, cls, ap))
-        total_ap += ap
-    mean_ap = total_ap / gt_class_num
+    mAP = np.mean(list(ap_class.values()))
     print('=' * 25)
-    print('mAP\t{:.4f}'.format(mean_ap))
+    print('mAP\t{:.4f}'.format(mAP))
 
-    # video_ap = dict()
-    # tot_scores = defaultdict(list)
-    # tot_tp = defaultdict(list)
-    # prec_at_n = defaultdict(list)
-    # tot_gt_actions = 0
-    # #
-    # process_index = 0
-    # all_videos_num = len(prediction['results'].keys())
-    # for each_vid_id in prediction['results'].keys():
-    #     process_index += 1
-    #     print("Now is evaluating: {}, process: {}/{}".format(each_vid_id, process_index, all_videos_num))
-    #
-    #     gt_actions = groundtruth[each_vid_id]
-    #     predict_actions = prediction['results'][each_vid_id]
-    #
-    #     det_prec, det_rec, det_scores = eval_detection_scores(
-    #         gt_actions, predict_actions, viou_threshold)
-    #     tag_prec, _, _ = eval_tagging_scores(gt_actions, predict_actions)
-    #
-    #     # record per video evaluation results
-    #     video_ap[each_vid_id] = voc_ap(det_rec, det_prec)
-    #     # tp = np.isfinite(det_scores)
-    #     # for nre in det_nreturns:
-    #     #     cut_off = min(nre, det_scores.size)
-    #     #     tot_scores[nre].append(det_scores[:cut_off])
-    #     #     tot_tp[nre].append(tp[:cut_off])
-    #     # for nre in tag_nreturns:
-    #     #     cut_off = min(nre, tag_prec.size)
-    #     #     prec_at_n[nre].append(tag_prec[cut_off - 1])
-    #     # tot_gt_actions += len(gt_actions)
-    #
-    # # calculate mean ap for detection
-    # mean_ap = np.mean(list(video_ap.values()))
-    # print('detection mAP (used in challenge): {}'.format(mean_ap))
-    # return mean_ap, video_ap
+    return mAP, ap_class
 
 
 def trans_gt_2_subm_4mat(groundtruth_json_path):
@@ -239,68 +225,3 @@ if __name__ == '__main__':
         pred = json.load(fp)
 
     mean_ap, ap_class = evaluate(pred, gt)
-
-    # trans_gt_2_subm_4mat('/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/11566930393.json')
-    # merge_gt_sub_4mat(['/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub.json',
-    #                    '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/3598080384_fks.json',
-    #                    '/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/11566930393_sub.json'])
-    #
-    # parser = argparse.ArgumentParser(description='Video visual action evaluation.')
-    # parser.add_argument('groundtruth_dir', type=str, help='Groundtruth json files diretory, e.g. '
-    #                                                       '\'/home/daivd/PycharmProjects/VORD/validation/\'')
-    # parser.add_argument('prediction_file', type=str, help='Prediction json file (submission format)')
-    # args = parser.parse_args()
-    #
-    # gen_vid_path(args.groundtruth_dir)
-
-    # mAP, rec_at_n, mprec_at_n = eval_visual_action(args.groundtruth_dir, args.prediction_file)
-
-    # gen_vid_path('/home/daivd/PycharmProjects/VORD/validation')
-
-    # find the groundtruth json file
-    # with open(os.path.join(args.groundtruth_dir, 'gt_vid_path.json'), 'r') as dict_in_f:
-    #     gt_vid_path_json = json.load(dict_in_f)
-    # groundtruth = dict()
-    # for each_vid_id in gt_vid_path_json:
-    #     # get groundtruth
-    #     with open(os.path.join(args.groundtruth_dir, gt_vid_path_json[each_vid_id]), 'r') as gt_f:
-    #         groundtruth_json = json.load(gt_f)
-        # get action instances
-
-        # gt_actions = []
-        # for each_ins in groundtruth_json['relation_instances']:
-        #
-        #     begin_fid = each_ins['begin_fid']
-        #     end_fid = each_ins['end_fid']
-        #
-        #     each_ins_trajectory = []
-        #     # end_fid += 1
-        #     for each_traj in groundtruth_json['trajectories'][begin_fid:end_fid]:
-        #         for each_traj_obj in each_traj:
-        #             if each_traj_obj['tid'] == each_ins['subject_tid']:
-        #                 each_traj_frame = [
-        #                     each_traj_obj['bbox']['xmin'],
-        #                     each_traj_obj['bbox']['ymin'],
-        #                     each_traj_obj['bbox']['xmax'],
-        #                     each_traj_obj['bbox']['ymax']
-        #                 ]
-        #                 each_ins_trajectory.append(each_traj_frame)
-        #
-        #     each_ins_action = {
-        #         "category": each_ins['predicate'],
-        #         "duration": [begin_fid, end_fid],
-        #         "trajectory": each_ins_trajectory
-        #     }
-        #
-        #     gt_actions.append(each_ins_action)
-    #     groundtruth[each_vid_id] = gt_actions
-    #
-    # with open('/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub_merge.json', 'r') as pred_f:
-    #     prediction = json.load(pred_f)
-    #
-    # evaluate('/home/daivd/PycharmProjects/VORD/validation/', prediction)
-
-    # with open('/home/daivd/PycharmProjects/VidVRD-helper/evaluation/test/task2/2793806282_sub_merge.json', 'r') as f:
-    #     json_s = json.load(f)
-    #     print(json_s['results']['2793806282'])
-

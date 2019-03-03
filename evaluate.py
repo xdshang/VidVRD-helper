@@ -23,12 +23,13 @@ def evaluate_relation(dataset, split, prediction):
     groundtruth = dict()
     for vid in dataset.get_index(split):
         groundtruth[vid] = dataset.get_relation_insts(vid)
-    mAP, rec_at_n, mprec_at_n = eval_visual_relation(groundtruth, prediction)
+    mean_ap, rec_at_n, mprec_at_n = eval_visual_relation(groundtruth, prediction)
     # evaluate in zero-shot setting
-    print('-- zero-shot')
+    print('-- zero-shot setting')
     zeroshot_triplets = dataset.get_triplets(split).difference(
             dataset.get_triplets('train'))
-    zeroshot_groundtruth = dict()
+    groundtruth = dict()
+    zs_prediction = dict()
     for vid in dataset.get_index(split):
         gt_relations = dataset.get_relation_insts(vid)
         zs_gt_relations = []
@@ -36,9 +37,12 @@ def evaluate_relation(dataset, split, prediction):
             if tuple(r['triplet']) in zeroshot_triplets:
                 zs_gt_relations.append(r)
         if len(zs_gt_relations) > 0:
-            zeroshot_groundtruth[vid] = zs_gt_relations
-    mAP, rec_at_n, mprec_at_n = eval_visual_relation(
-            zeroshot_groundtruth, prediction)
+            groundtruth[vid] = zs_gt_relations
+            zs_prediction[vid] = []
+            for r in prediction[vid]:
+                if tuple(r['triplet']) in zeroshot_triplets:
+                    zs_prediction[vid].append(r)
+    mean_ap, rec_at_n, mprec_at_n = eval_visual_relation(groundtruth, zs_prediction)
 
 
 if __name__ == '__main__':
@@ -50,9 +54,17 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.dataset=='vidvrd':
-        dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', [args.split])
+        if args.task=='relation':
+            # load train set for zero-shot evaluation
+            dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', ['train', args.split])
+        else:
+            dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', [args.split])
     elif args.dataset=='vidor':
-        dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/vidor', [args.split], low_memory=True)
+        if args.task=='relation':
+            # load train set for zero-shot evaluation
+            dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/vidor', ['training', args.split], low_memory=True)
+        else:
+            dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/vidor', [args.split], low_memory=True)
     else:
         raise Exception('Unknown dataset {}'.format(args.dataset))
 
@@ -62,8 +74,8 @@ if __name__ == '__main__':
     print('Number of videos in prediction: {}'.format(len(pred['results'])))
 
     if args.task=='object':
-        evaluate_object(dataset, args.split, pred)
+        evaluate_object(dataset, args.split, pred['results'])
     elif args.task=='action':
-        evaluate_action(dataset, args.split, pred)
+        evaluate_action(dataset, args.split, pred['results'])
     elif args.task=='relation':
-        evaluate_relation(dataset, args.split, pred)
+        evaluate_relation(dataset, args.split, pred['results'])

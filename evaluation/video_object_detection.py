@@ -54,8 +54,7 @@ def evaluate(gt, pred, use_07_metric=True, thresh_t=0.5):
     gt_class_num = len(gt_classes)
 
     result_class = dict()
-    results = pred['results']
-    for vid, tracks in results.items():
+    for vid, tracks in pred.items():
         for traj in tracks:
             if traj['category'] not in result_class:
                 result_class[traj['category']] = [[vid, traj['score'], traj['trajectory']]]
@@ -153,4 +152,4 @@ if __name__ == "__main__":
         pred = json.load(fp)
     print('Number of videos in prediction: {}'.format(len(pred['results'])))
 
-    mean_ap, ap_class = evaluate(gt, pred)
+    mean_ap, ap_class = evaluate(gt, pred['results'])

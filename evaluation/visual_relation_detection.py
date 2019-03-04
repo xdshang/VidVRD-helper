@@ -72,21 +72,25 @@ def evaluate(groundtruth, prediction, viou_threshold=0.5,
     for vid, gt_relations in groundtruth.items():
         if len(gt_relations)==0:
             continue
+        tot_gt_relations += len(gt_relations)
         predict_relations = prediction[vid]
+        # compute average precision and recalls in detection setting
         det_prec, det_rec, det_scores = eval_detection_scores(
                 gt_relations, predict_relations, viou_threshold)
-        tag_prec, _, _ = eval_tagging_scores(gt_relations, predict_relations)
-        # record per video evaluation results
         video_ap[vid] = voc_ap(det_rec, det_prec)
         tp = np.isfinite(det_scores)
         for nre in det_nreturns:
             cut_off = min(nre, det_scores.size)
             tot_scores[nre].append(det_scores[:cut_off])
             tot_tp[nre].append(tp[:cut_off])
+        # compute precisions in tagging setting
+        tag_prec, _, _ = eval_tagging_scores(gt_relations, predict_relations)
         for nre in tag_nreturns:
             cut_off = min(nre, tag_prec.size)
-            prec_at_n[nre].append(tag_prec[cut_off - 1])
-        tot_gt_relations += len(gt_relations)
+            if cut_off > 0:
+                prec_at_n[nre].append(tag_prec[cut_off - 1])
+            else:
+                prec_at_n[nre].append(0.)
     # calculate mean ap for detection
     mean_ap = np.mean(list(video_ap.values()))
     # calculate recall for detection

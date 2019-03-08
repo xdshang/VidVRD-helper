@@ -96,8 +96,12 @@ def detect():
         video_relations[vid] = association.greedy_relational_association(
                 dataset, video_st_relations[vid], max_traj_num_in_clip=100)
     # save detection result
-    with open(os.path.join(get_model_path(), 'baseline_video_relations.json'), 'w') as fout:
-        json.dump(video_relations, fout)
+    with open(os.path.join(get_model_path(), 'baseline_relation_prediction.json'), 'w') as fout:
+        output = {
+            'version': 'VERSION 1.0',
+            'results': video_relations
+        }
+        json.dump(output, fout)
 
 
 if __name__ == '__main__':

@@ -41,7 +41,7 @@ def evaluate(groundtruth, prediction, viou_threshold=0.5):
     gt_class_num = len(gt_classes)
 
     prediction_actions = dict()
-    for vid, tracks in prediction['results'].items():
+    for vid, tracks in prediction.items():
         for traj in tracks:
             pred_action = {
                 "id": vid,
@@ -120,4 +120,4 @@ if __name__ == '__main__':
         pred = json.load(fp)
     print('Number of videos in prediction: {}'.format(len(pred['results'])))
 
-    mean_ap, ap_class = evaluate(gt, pred)
+    mean_ap, ap_class = evaluate(gt, pred['results'])

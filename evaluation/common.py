@@ -96,7 +96,7 @@ def viou(traj_1, duration_1, traj_2, duration_2):
         top = max(roi_1[1], roi_2[1])
         right = min(roi_1[2], roi_2[2])
         bottom = min(roi_1[3], roi_2[3])
-        v_overlap += (right - left + 1) * (bottom - top + 1)
+        v_overlap += max(0, right - left + 1) * max(0, bottom - top + 1)
     v1 = 0
     for i in range(len(traj_1)):
         v1 += (traj_1[i][2] - traj_1[i][0] + 1) * (traj_1[i][3] - traj_1[i][1] + 1)

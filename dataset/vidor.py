@@ -39,9 +39,6 @@ class VidOR(DatasetV1):
         return actions
 
     def get_video_path(self, vid):
-        """
-        True if the directory videos uses imagenet struture
-        """
         return os.path.join(self.video_rpath, self.annos[vid]['video_path'])
 
 

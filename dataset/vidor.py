@@ -42,9 +42,7 @@ class VidOR(DatasetV1):
         """
         True if the directory videos uses imagenet struture
         """
-        sub_dir = self.annos[vid]['video_path']
-        path = os.path.join(self.video_rpath, sub_dir, '{}.mp4'.format(vid))
-        return path
+        return os.path.join(self.video_rpath, self.annos[vid]['video_path'])
 
 
 if __name__ == '__main__':

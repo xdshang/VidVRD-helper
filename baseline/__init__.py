@@ -13,7 +13,7 @@ def get_feature_path(name, vid):
     """
     Path to save intermediate object trajectory proposals and features
     """
-    path = os.path.join('../../vidvrd-baseline-output', 'features', name)
+    path = os.path.join('../vidvrd-baseline-output', 'features', name)
     if not os.path.exists(path):
         os.makedirs(path)
     path = os.path.join(path, vid)
@@ -26,7 +26,7 @@ def get_model_path():
     """
     Path to save trained model
     """
-    path = os.path.join('../../vidvrd-baseline-output', 'models')
+    path = os.path.join('../vidvrd-baseline-output', 'models')
     if not os.path.exists(path):
         os.makedirs(path)
     return path

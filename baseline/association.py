@@ -10,7 +10,6 @@ from dlib import drectangle
 import numpy as np
 
 from baseline import *
-from dataset import Dataset
 from trajectory import traj_iou, object_trajectory_proposal
 
 

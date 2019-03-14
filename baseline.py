@@ -6,7 +6,7 @@ from collections import defaultdict
 
 from tqdm import tqdm
 
-from dataset import Dataset
+from dataset import VidVRD
 from baseline import segment_video, get_model_path
 from baseline import trajectory, feature, model, association
 
@@ -15,7 +15,7 @@ def load_object_trajectory_proposal():
     """
     Test loading precomputed object trajectory proposals
     """
-    dataset = Dataset()
+    dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', ['train', 'test'])
 
     video_indices = dataset.get_index(split='train')
     for vid in video_indices:
@@ -39,7 +39,7 @@ def load_relation_feature():
     """
     Test loading precomputed relation features
     """
-    dataset = Dataset()
+    dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', ['train', 'test'])
     extractor = feature.FeatureExtractor(dataset, prefetch_count=0)
 
     video_indices = dataset.get_index(split='train')
@@ -59,7 +59,7 @@ def load_relation_feature():
 
 
 def train():
-    dataset = Dataset()
+    dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', ['train', 'test'])
 
     param = dict()
     param['model_name'] = 'baseline'
@@ -80,7 +80,7 @@ def train():
 
 
 def detect():
-    dataset = Dataset()
+    dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', ['train', 'test'])
     with open(os.path.join(get_model_path(), 'baseline_setting.json'), 'r') as fin:
         param = json.load(fin)
     short_term_relations = model.predict(dataset, param)

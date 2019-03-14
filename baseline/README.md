@@ -13,6 +13,7 @@ The baseline code for the VidVRD dataset introduced in the following paper.
 ## Baseline Quick Start
 1. Install the prerequisites
 ```
+export PYTHONNOUSERSITE=1
 conda create -n vidvrd python=2.7 anaconda cmake tensorflow=1.8.0 keras tqdm ffmpeg=3.4 py-opencv
 source activate vidvrd
 pip install dlib==19.3.1 --isolated

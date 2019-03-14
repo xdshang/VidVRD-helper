@@ -9,7 +9,6 @@ from time import strftime, sleep
 from itertools import cycle, product
 from multiprocessing import Process, Queue, sharedctypes
 
-from dataset import Dataset
 from trajectory import traj_iou, object_trajectory_proposal
 from baseline import *
 

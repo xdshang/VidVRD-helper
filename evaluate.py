@@ -19,13 +19,16 @@ def evaluate_action(dataset, split, prediction):
     mean_ap, ap_class = eval_action(groundtruth, prediction)
 
 
-def evaluate_relation(dataset, split, prediction):
+def evaluate_relation(dataset, split, prediction, use_old_zeroshot_eval=False):
     groundtruth = dict()
     for vid in dataset.get_index(split):
         groundtruth[vid] = dataset.get_relation_insts(vid)
     mean_ap, rec_at_n, mprec_at_n = eval_visual_relation(groundtruth, prediction)
     # evaluate in zero-shot setting
-    print('-- zero-shot setting')
+    if use_old_zeroshot_eval:
+        print('-- zero-shot setting (old)')
+    else:
+        print('-- zero-shot setting (new)')
     zeroshot_triplets = dataset.get_triplets(split).difference(
             dataset.get_triplets('train'))
     groundtruth = dict()
@@ -38,10 +41,15 @@ def evaluate_relation(dataset, split, prediction):
                 zs_gt_relations.append(r)
         if len(zs_gt_relations) > 0:
             groundtruth[vid] = zs_gt_relations
-            zs_prediction[vid] = []
-            for r in prediction[vid]:
-                if tuple(r['triplet']) in zeroshot_triplets:
-                    zs_prediction[vid].append(r)
+            if use_old_zeroshot_eval:
+                # old zero-shot evaluation doesn't filter out non-zeroshot predictions
+                # in a video, which will result in very low Average Precision 
+                zs_prediction[vid] = prediction[vid]
+            else:
+                zs_prediction[vid] = []
+                for r in prediction[vid]:
+                    if tuple(r['triplet']) in zeroshot_triplets:
+                        zs_prediction[vid].append(r)
     mean_ap, rec_at_n, mprec_at_n = eval_visual_relation(groundtruth, zs_prediction)
 
 

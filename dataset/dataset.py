@@ -134,6 +134,7 @@ class Dataset(object):
                                             roi['bbox']['ymax'])
         for tid in traj:
             object_insts.append({
+                'tid': tid,
                 'category': tid2cls[tid],
                 'trajectory': traj[tid]
             })

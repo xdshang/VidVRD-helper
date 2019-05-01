@@ -2,7 +2,7 @@
 
 This repository contains some helper functions for the convenient usage of
 [VidVRD dataset](http://lms.comp.nus.edu.sg/research/VidVRD.html)
-and a [Grand Challenge dataset](http://lms.comp.nus.edu.sg/research/dataset.html). 
+and [VidOR dataset](http://lms.comp.nus.edu.sg/research/vidor.html). 
 It also contains scripts for evaluating several relevant tasks, i.e.
 *video object detection*, *action detection* and *visual relation detection*.
 
@@ -19,4 +19,14 @@ Please cite the following papers if the datasets help your research:
     month={October},
     year={2017}
 }
+
+@inproceedings{shang2019annotating,
+    author={Shang, Xindi and Di, Donglin and Xiao, Junbin and Cao, Yu and Yang, Xun and Chua, Tat-Seng},
+    title={Annotating Objects and Relations in User-Generated Videos},
+    booktitle={ACM International Conference on Multimedia Retrieval},
+    address={Ottawa, ON, Canada},
+    month={June},
+    year={2019}
+}
+
 ```

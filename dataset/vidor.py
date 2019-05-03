@@ -51,7 +51,7 @@ if __name__ == '__main__':
     import json
     from argparse import ArgumentParser
 
-    parser = ArgumentParser(description='Generate a single JSON groundtruth file for videos')
+    parser = ArgumentParser(description='Generate a single JSON groundtruth file for VidOR')
     parser.add_argument('split', choices=['training', 'validation'], 
                         help='which dataset split the groundtruth generated for')
     parser.add_argument('task', choices=['object', 'action', 'relation'],
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # to load the trainning set without low memory mode for faster processing, you need sufficient large RAM
-    dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/vidor', ['training', 'validation'], low_memory=True)
+    dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/video', ['training', 'validation'], low_memory=True)
     index = dataset.get_index(args.split)
 
     gts = dict()

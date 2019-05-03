@@ -70,9 +70,9 @@ if __name__ == '__main__':
     elif args.dataset=='vidor':
         if args.task=='relation':
             # load train set for zero-shot evaluation
-            dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/vidor', ['training', args.split], low_memory=True)
+            dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/video', ['training', args.split], low_memory=True)
         else:
-            dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/vidor', [args.split], low_memory=True)
+            dataset = VidOR('../vidor-dataset/annotation', '../vidor-dataset/video', [args.split], low_memory=True)
     else:
         raise Exception('Unknown dataset {}'.format(args.dataset))
 

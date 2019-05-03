@@ -42,6 +42,33 @@ class VidVRD(Dataset):
 
 
 if __name__ == '__main__':
-    dataset = VidVRD('../../vidvrd-dataset', '../../vidvrd-dataset/videos', ['train', 'test'])
-    test_inds = dataset.get_index('test')
-    print(dataset.get_relation_insts(test_inds[111]))
+    """
+    To generate a single JSON groundtruth file for specific split and task,
+    run this script from the parent directory, for example, 
+    python -m dataset.vidvrd test relation ~/vidvrd_gt_test_relation.json
+    """
+    import json
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser(description='Generate a single JSON groundtruth file for VidVRD')
+    parser.add_argument('split', choices=['train', 'test'], 
+                        help='which dataset split the groundtruth generated for')
+    parser.add_argument('task', choices=['object', 'relation'],
+                        help='which task the groundtruth generated for')
+    parser.add_argument('output', type=str, help='Output path')
+    args = parser.parse_args()
+
+    # to load the trainning set without low memory mode for faster processing, you need sufficient large RAM
+    dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', ['train', 'test'])
+    index = dataset.get_index(args.split)
+
+    gts = dict()
+    for ind in index:
+        if args.task=='object':
+            gt = dataset.get_object_insts(ind)
+        elif args.task=='relation':
+            gt = dataset.get_relation_insts(ind)
+        gts[ind] = gt
+    
+    with open(args.output, 'w') as fout:
+        json.dump(gts, fout, separators=(',', ':'))

@@ -73,7 +73,7 @@ def evaluate(groundtruth, prediction, viou_threshold=0.5,
         if len(gt_relations)==0:
             continue
         tot_gt_relations += len(gt_relations)
-        predict_relations = prediction[vid]
+        predict_relations = prediction.get(vid, [])
         # compute average precision and recalls in detection setting
         det_prec, det_rec, det_scores = eval_detection_scores(
                 gt_relations, predict_relations, viou_threshold)

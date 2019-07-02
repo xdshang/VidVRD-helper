@@ -47,7 +47,7 @@ def evaluate_relation(dataset, split, prediction, use_old_zeroshot_eval=False):
                 zs_prediction[vid] = prediction[vid]
             else:
                 zs_prediction[vid] = []
-                for r in prediction[vid]:
+                for r in prediction.get(vid, []):
                     if tuple(r['triplet']) in zeroshot_triplets:
                         zs_prediction[vid].append(r)
     mean_ap, rec_at_n, mprec_at_n = eval_visual_relation(groundtruth, zs_prediction)

@@ -1,7 +1,7 @@
 ## Video Visual Relation Detection Helpler
 
 This repository contains some helper functions for the convenient usage of
-[VidVRD dataset](http://lms.comp.nus.edu.sg/research/VidVRD.html)
+[ImageNet-VidVRD dataset](http://lms.comp.nus.edu.sg/research/VidVRD.html)
 and [VidOR dataset](http://lms.comp.nus.edu.sg/research/vidor.html). 
 It also contains scripts for evaluating several relevant tasks, i.e.
 *video object detection*, *action detection* and *visual relation detection*.

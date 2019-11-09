@@ -54,7 +54,7 @@ python evaluate.py [dataset_name] [split_name] [task_name] [path_to_prediction_j
 ```
 
 #### Prediction JSON Format for Visual Object Detection
-Please refer to this [page](http://lms.comp.nus.edu.sg/research/video-relation-challenge/mm19-gdc/task1.html)
+Please refer to this [page](https://xdshang.github.io/docs/video-relation-challenge/mm19-gdc/task1.html)
 
 #### Prediction JSON Format for Action Detection
-Please refer to this [page](http://lms.comp.nus.edu.sg/research/video-relation-challenge/mm19-gdc/task2.html)
+Please refer to this [page](https://xdshang.github.io/docs/video-relation-challenge/mm19-gdc/task2.html)

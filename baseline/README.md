@@ -17,7 +17,7 @@ conda create -n vidvrd python=2.7 anaconda cmake tensorflow=1.8.0 keras tqdm ffm
 export PYTHONNOUSERSITE=1 && source activate vidvrd
 pip install dlib==19.3.1 --isolated
 ``` 
-2. Download precomputed features, model and detected relations from [link1](https://lms.comp.nus.edu.sg/research/public_data/vidvrd/vidvrd-baseline-output.zip) or [link2](http://dl.nextcenter.org/public/imagenet-vidvrd/vidvrd-baseline-output.zip), and decompress the zipfile under the same folder as this repository.
+2. Download precomputed features, model and detected relations from [here](https://storage.googleapis.com/next-dataset/ImageNet-VidVRD/vidvrd-baseline-output.zip), and decompress the zipfile under the same folder as this repository.
 3. Run `python evaluate.py vidvrd test relation ../vidvrd-baseline-output/models/baseline_relation_prediction.json` to evaluate the precomputed detected relations. Since a few wrong labels in the dataset were corrected after paper submission, the result is slightly different from the one reported in the paper. Some qualitative results can be found [here](http://mm.zl.io).
 4. Run `python baseline.py --detect` to detect video visual relations using the precomputed model.
 5. Run `python baseline.py --train` to train a new model by adjusting the hyperparameters in the script, based on the precomputed features.

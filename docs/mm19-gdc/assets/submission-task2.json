@@ -1,0 +1,30 @@
+{
+    "version": "VERSION 1.0",
+    "results": {
+        "11848291003": [
+            {
+                "category": "bite",
+                "score": 0.912,
+                "duration": [5, 8],
+                "trajectory": [
+                    [9, 10, 45, 20],
+                    [10, 17, 46, 22],
+                    [10, 12, 40, 15]
+                ]
+            },
+            {
+                "category": "watch",
+                "score": 0.68,
+                "duration": [6, 8],
+                "trajectory": [ 
+                    [89, 10, 128, 80], 
+                    [90, 10, 128, 79]
+                ]
+            }
+        ]
+    },
+    "external_data": {
+        "used": true,
+        "details": "First fully-connected layer from VGG-16 pre-trained on ILSVRC-2012 training set"
+    }
+}

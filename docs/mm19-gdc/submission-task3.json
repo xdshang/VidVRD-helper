@@ -1,0 +1,39 @@
+{
+    "version": "VERSION 1.0",
+    "results": {
+        "3249280846": [
+            {
+                "triplet": ["dog", "bite", "frisbee"],
+                "score": 0.9,
+                "duration": [5, 8],
+                "sub_traj": [
+                    [9, 10, 45, 20],
+                    [10, 17, 46, 22],
+                    [10, 12, 40, 15]
+                ],
+                "obj_traj": [
+                    [20, 10, 145, 150],
+                    [60, 11, 195, 170],
+                    [73, 12, 189, 148]
+                ]
+            },
+            {
+                "triplet": ["adult", "watch", "dog"],
+                "score": 0.68,
+                "duration": [6, 8],
+                "sub_traj": [ 
+                    [89, 10, 128, 80], 
+                    [90, 10, 128, 79]
+                ],
+                "obj_traj": [
+                    [10, 17, 46, 22],
+                    [10, 12, 40, 16]
+                ]
+            }
+        ]
+    },
+    "external_data": {
+        "used": true,
+        "details": "First fully-connected layer from VGG-16 pre-trained on ILSVRC-2012 training set"
+    }
+}

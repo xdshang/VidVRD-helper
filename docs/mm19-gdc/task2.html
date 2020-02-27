@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="renderer" content="webkit">
+        <title>Task 2 - Action Detection - ACM MM'19 Grand Challenge</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="ACM Multimedia'19 Grand Challenge">
+        <meta name="author" content="Donglin Di">
+
+        <link href="styles/bootstrap.min.css" rel="stylesheet">
+        <link href="styles/common.css" rel="stylesheet">
+        <link href="styles/show-json.css" rel="stylesheet">
+    </head>
+
+    <body data-spy="scroll" data-target=".navbar">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <h2 class="navbar-brand hidden-xs hidden-sm" style="padding-top: 0px;padding-bottom: 0px;height: 30px;line-height: 35px">
+                        <span class="logo">Relation Understanding in Videos</span>
+                    </h2>
+                    <h5 class="hidden-xs hidden-sm" style="margin-bottom: 0px">
+                        <span style="color:#003d7c !important;">ACM Multimedia 2019 Grand Challenge</span>
+                    </h5>
+                    <h2 class="navbar-brand hidden-md hidden-lg">
+                        <span class="logo">Relation Challenge</span>
+                    </h2>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="page-scroll" href="index.html#task">Tasks</a></li>
+                        <li><a class="page-scroll" href="index.html#timeline">Timeline</a></li>
+                        <li><a class="page-scroll" href="index.html#leaderboard">Leaderboard</a></li>
+                        <li><a class="page-scroll" href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- linked this part-->
+        <section id="introduction" class="scrollable-section">
+            <div class="container">
+                <h3>Task 2: Action Detection</h3>
+                <p>
+                    In the area of action recognition, the task of action detection is the most difficult task
+                        which requires the spatio-temporal localization of actions of interest.
+                    This task is intended to evaluate the abilities of the algorithms in 
+                        1) recognizing actions from the 42 common categories performed by human and animals
+                            (a bit different from the human-centric action detections);
+                        and 2) localizing the actions in space and time,
+                            where multiple subjects may appear and each of them may perform several actions at a time.
+                    Hence, the detectors need to have creative solutions that leverage any input modalities,
+                        overcome the large variation within each category of action representation
+                        and learn the intention of action.
+
+                    <br>
+                    <strong>For information related to this task, please contact:</strong> <a href="mailto:donglin.di@u.nus.edu?Subject=ACMMM Challenge" target="_top">donglin.di@u.nus.edu</a>
+                </p>
+
+                <h3>Dataset</h3>
+                <p>
+                    The dataset for this task contains 10K user-generated videos
+                        and ~69,000 annotated action instances in 42 categories of atomic visual actions (e.g. "watch", "grab", and "hug").
+                    In the annotations, each action instance is temporally localized by a starting and a ending frame indice, 
+                        and then spatially localized at the in-between frames by a bounding-box trajectory over the subject of the action.
+                    Note that the subjects are not limited to humankind (adult, child, baby), but also include several common animals
+                        listed in the introduction page of the dataset.
+                    The distribution among training, validation and testing is 7,000, 835 and 2,165 videos respectively.
+                </p>
+                <p>
+                    The videos and annotations can be downloaded directly from 
+                        <a href="https://xdshang.github.io/docs/vidor.html#downloads" target="_blank">here</a>.
+                    In order to obtain the action annotation related to this task, 
+                    you need to parse each of the "<em>relation_instances</em>" in the annotations and extract the
+                    "<em>predicate</em>" of action type and the corresponding
+                    "<em>subject_tid</em>" to form an action instance. You can use the script
+                    <a href="https://github.com/xdshang/VidVRD-helper/blob/master/dataset/vidor.py" target="_blank">here</a>
+                    for this processing.
+                </p>
+                <p>
+                    Please note that there are 10.7% and 12.5% videos in the training and validation split, respectively,
+                    not containing any annotated action instance,
+                    On the other hand, the annotations contain additional annotation of objects and relations.
+                    This task allows participants to use these extra data to train the action detection models.
+                </p>
+
+                <h3>Evaluation Metric</h3>
+                <p>
+                    The Average Precision (AP) is used as the metric for evaluating the detection performance <em>per action category</em>
+                    and calculate the mean AP (mAP) over all categories as the final ranking score.
+                    To determine if a predicted action instance \( (c^p, \mathcal{T}^p) \) is true positive, we see if it can match 
+                    a ground truth \( (c^g, \mathcal{T}^g) \) that meets the following requirements:
+                    <ul>
+                        <li>their action categories are same, i.e. \( c^p = c^g \);</li>
+                        <li>their bounding-box trajectories overlap s.t. \( \text{vIoU}(\mathcal{T}^p, \mathcal{T}^g) \geq 0.5 \);</li>
+                        <li>the overlap of the trajectory pair \( \text{ov}_{pg}=\text{vIoU}(\mathcal{T}^p, \mathcal{T}^g) \)
+                                is the maximum among those paired with the other unmatched ground truths \( \mathcal{G} \), i.e.
+                                \( \text{ov}_{pg} \geq \text{ov}_{pg'} (g' \in \mathcal{G}) \).
+                        </li>
+                    </ul>
+                    To illustrate the terms, \( c \) is defined as the action category of an action instance;
+                    \( \mathcal{T} \) is the bounding-box trajectory defined by starting and ending frame index and a sequence of bounding-boxes;
+                    and \( \text{vIoU} \) refers to the voluminal Intersection over Union.
+                </p>
+                <p>
+                    The evaluation code used by the evaluation server can be found
+                    <a href="https://github.com/xdshang/VidVRD-helper/blob/master/evaluation/action_detection.py" target="_blank">here</a>.
+                    The number of predictions per video is limited up to 500.
+                </p>
+
+                <h3>Submission Format</h3>
+                <p>
+                    Please use the following JSON format when submitting your results for the challenge:
+                    <pre id="result"></pre>
+                    The example above is illustrative. Comments must be removed in your submission.
+                    A sample submission file is available <a href="assets/submission-task2.json">here</a>. 
+                </p>
+            </div>
+        </section>
+
+        <footer class="footer" style="padding-top: 50px;">
+            <div class="container">
+                <hr>
+                <p style="font-style: italic; text-align: center">
+                    Copyright &copy; 2018-2020 NExT++ /
+                    <a class="black" href="http://www.nextcenter.org/privacy-policy">Privacy Policy</a> /
+                    <a class="black" href="http://www.nextcenter.org/terms-conditions">Terms &amp; Conditions</a>
+                </p>
+            </div>
+        </footer>
+
+        <script type="text/javascript" src="scripts/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+        <script type="text/javascript" src="scripts/jquery.easing.min.js"></script>
+        <script type="text/javascript" src="scripts/scrolling-nav.js"></script>
+        <script type="text/javascript" src="scripts/show-json.js"></script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript">
+            const res = "{\n" +
+            "  version: \"VERSION 1.0\",\n" +
+            "  results: {\n" +
+            "    \"11848291003\": [                          # video ID\n" +
+            "      {\n" +
+            "        category: \"bite\",                     # action category\n" +
+            "        score: 0.912,                         # confidence score\n" +
+            "        duration: [5, 8],                     # starting (inclusive) and ending (exclusive) frame IDs\n" +
+            "        trajectory: [                         # subject trajectory\n" +
+            "          [9, 10, 45, 20],                    # bounding box at the starting frame \n" +
+            "          [10, 17, 46, 22],                   # [left, top, right, bottom] (all inclusive)\n" +
+            "          [10, 12, 40, 15]\n" +
+            "        ],\n" +
+            "      },\n" +
+            "      {\n" +
+            "        category: \"watch\",\n" +
+            "        score: 0.68,\n" +
+            "        duration: [6, 8],\n" +
+            "        trajectory: [ \n" +
+            "          [89, 10, 128, 80], \n" +
+            "          [90, 10, 128, 79]\n" +
+            "        ],\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  }\n" +
+            "  external_data: {\n" +
+            "    used: true,                               # Boolean flag. True indicates the use of external data.\n" +
+            "    details: \"First fully-connected layer from VGG-16 pre-trained on ILSVRC-2012 training set\" # This string details what kind of external data you used and how you used it.\n" +
+            "  }\n" +
+            "}";
+            $('#result').html(syntaxHighlight(res));
+        </script>
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+              tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+            });
+        </script>
+    </body>
+</html>

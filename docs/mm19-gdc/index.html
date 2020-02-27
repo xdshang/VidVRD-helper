@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="renderer" content="webkit">
+        <title>ACM MM 2019 Video Relation Understanding Challenge</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="ACM Multimedia'19 Grand Challenge">
+        <meta name="author" content="Donglin Di and Xindi Shang">
+
+        <link href="styles/bootstrap.min.css" rel="stylesheet">
+        <link href="styles/common.css" rel="stylesheet">
+    </head>
+
+    <body data-spy="scroll" data-target=".navbar">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <h2 class="navbar-brand hidden-xs hidden-sm" style="padding-top: 0px;padding-bottom: 0px;height: 30px;line-height: 35px">
+                        <span class="logo">Relation Understanding in Videos</span>
+                    </h2>
+                    <h5 class="hidden-xs hidden-sm" style="margin-bottom: 0px">
+                        <span style="color:#003d7c !important;">ACM Multimedia 2019 Grand Challenge</span>
+                    </h5>
+                    <h2 class="navbar-brand hidden-md hidden-lg">
+                        <span class="logo">Relation Challenge</span>
+                    </h2>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="page-scroll" href="#introduction">Introduction</a></li>
+                        <li><a class="page-scroll" href="#task">Tasks</a></li>
+                        <li><a class="page-scroll" href="#participation">Participation</a></li>
+                        <li><a class="page-scroll" href="#timeline">Timeline</a></li>
+                        <li><a class="page-scroll" href="#leaderboard">Leaderboard</a></li>
+                        <li><a class="page-scroll" href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- linked this part-->
+        <section id="introduction" class="scrollable-section">
+            <div class="container">
+                <h3>Introduction</h3>
+                <p>
+                    For decades, multimedia researchers mainly evaluate visual systems according to a set of
+                    application-driven tasks, such as the cross-modal retrieval and concept annotation etc.
+                    Although the recent advance in computer vision has effectively boosted the
+                    performance of visual systems on these tasks, a core question still cannot be explicitly
+                    answered: Does the machine understand what is happening in a video, and can the results of the
+                    analysis be interpretable by human users? Another way to look at the limitation is to evaluate
+                    how many facts that the machine can recognize from a video.
+                </p>
+                <p>
+                    This new <a href="https://dl.acm.org/authorize?N699935" target="_blank">
+                        ACM MM 2019 Video Relation Understanding (VRU) Challenge</a> 
+                    will encourage researchers to explore a key aspect of recognizing
+                    facts from a video, that is relation understanding. In many AI and knowledge-based systems,
+                    a fact is represented by a relation between a subject entity and an object entity (i.e.
+                    &lt;subject,predicate,object&gt;), which forms the fundamental building block for high-level
+                    inference and decision making tasks. The challenge is based on
+                    <a href="https://xdshang.github.io/docs/vidor.html" style="color: #ff6600;">VidOR Dataset</a>,
+                    a large-scale user-generated video dataset with objects and relations densly annotated.
+                    We announce 3 pivotal tasks in video object detection,
+                    action detection and visual relation detection to push the limits of relation understanding.
+                </p>
+            </div>
+        </section>
+
+        <section id="task" class="scrollable-section">
+            <div class="container">
+                <h3>Tasks</h3>
+                <h4>
+                    Task 1: Video Object Detection
+                    <a href="task1.html" style="font-size: 14px;">[details]</a>
+                </h4>
+                <p>
+                    As the first step in relation understanding, the task is to detect objects of certain categories
+                    and spatio-temporally localize each detected object using a bounding-box trajectory in videos.
+                    For each object category, we compute Average Precision (AP) to evaluate the detection performance
+                    and rank according to the mean AP over all categories.
+                </p>
+                <h4>
+                    Task 2: Action Detection
+                    <a href="task2.html" style="font-size: 14px;">[details]</a>
+                </h4>
+                <p>
+                    Action is another important semantic in videos. This task is to detect actions of certain
+                    categories and spatio-temporally localize the subject of each detected action using a bounding-box
+                    trajectory. For each action category, we compute AP to evaluate the detection performance and rank
+                    according to the mean AP over all categories.
+                </p>
+                <h4>
+                    Task 3: Visual Relation Detection
+                    <a href="task3.html" style="font-size: 14px;">[details]</a>
+                </h4>
+                <p>
+                    Beyond recognizing object and action individually, this task is to detect relation triplets (i.e.
+                    &lt;subject,predicate,object&gt;) of interest and spatio-temporally localize the subject and object of
+                    each detected relation triplet using bounding-box trajectories. The categories of predicate
+                    will also include spatial type in addition to the action type. For each testing video, we compute AP
+                    to evaluate the detection performance and rank according to the mean AP over all testing videos.
+                </p>
+            </div>
+        </section>
+
+        <section id="participation" class="scrollable-section">
+            <div class="container">
+                <h3>Participation</h3>
+                <p>
+                    The challenge is a team-based contest. Each team can have one or more members, and an individual cannot
+                    be a member of multiple teams in a task. For registration, please email the following information
+                    to the challenge organizers:
+                    <ul>
+                        <li>Participating Task (one of the above three tasks to participate)</li>
+                        <li>Team Name</li>
+                        <li>Team Members (first name/last name)</li>
+                        <li>Team Leader (we will send important notifications and testing videos to the team leader)</li>
+                        <li>Team Leader Email</li>
+                    </ul>
+                    Please note that each task needs a separate registration.
+                </p>
+                <p>
+                    At the end of the challenge, all teams will be ranked based on the objective evaluation above.
+                    The top three performing teams of each task will receive award certificates.
+                    At the same time, by submitting a 4-page overview paper (plus 1-page reference) to ACM MM'19,
+                    all accepted submissions are eligible for the conference’s grand challenge award competition.
+                </p>
+            </div>
+        </section>
+
+        <section id="timeline" class="scrollable-section">
+            <div class="container">
+                <h3>Timeline</h3>
+                <ul>
+                    <li><del>February 22, 2019: Web site and call for participation ready</del></li>
+                    <li><del>February 24, 2019: Training and validation videos available for download</del></li>
+                    <li><del>March 2, 2019: Training and validation annotations available for download</del></li>
+                    <li><del>May 22, 2019: Testing videos open to registered participants for download</del></li>
+                    <li><del>June 22, 2019 <b>June 26, 2019, 23:59 AoE (extended)</b>: Results submission</del></li>
+                    <li><del>July 1, 2019: Evaluation results announce</del></li>
+                    <li><del>July 8, 2019: Paper submission deadline</del></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="leaderboard" class="scrollable-section">
+            <div style="background-color: #e8e8e8">
+                <div class="container">
+                    <h3>Leaderboard</h3>
+                    <h4>
+                        Task 1: Video Object Detection
+                    </h4>
+                    <div class="table-responsive">
+                    <table class="table well">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Rank</th>
+                            <th>Team Name</th>
+                            <th>Performance: mean AP</th>
+                            <th>Team Members</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>DeepBlueAI</td>
+                            <td>0.0944</td>
+                            <td>Zhipeng Luo, Yuehan Yao, Zhenyu Xu, Feng Ni</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <h4>
+                        Task 3: Visual Relation Detection
+                    </h4>
+                    <div class="table-responsive">
+                    <table class="table well">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Rank</th>
+                            <th>Team Name</th>
+                            <th>Performance: mean AP</th>
+                            <th>* Tagging Precision@5</th>
+                            <th>Team Members</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>MAGUS.Gamma</td>
+                            <td>0.0631</td>
+                            <td>0.421</td>
+                            <td>
+                                Xu Sun, Yuan Zi, Tongwei Ren, Gangshan Wu 
+                                [<a href="https://dl.acm.org/citation.cfm?id=3356076" target="_blank">paper</a>]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>RELAbuilder</td>
+                            <td>0.00546</td>
+                            <td>0.236</td>
+                            <td>
+                                Sipeng Zheng, Xiangyu Chen, Qin Jin
+                                [<a href="https://dl.acm.org/citation.cfm?id=3356080" target="_blank">paper</a>]
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <p>
+                        * Tagging Precision@5 is an auxiliary metric, which specifically indicates the ability of tagging 
+                        accurate visual relations in top 5 but won't evaluate the accuracy of the bounding-box trajectories 
+                        of the subject and object.
+                    </p>
+                    <p>
+                        ** The challenge has 23 registered teams from around the world. However, due to the big challenges in both the
+                        tasks and dataset, only a few outstanding teams successfully submitted results by the final deadline.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="scrollable-section">
+            <div class="container">
+                <h3>Contact</h3>
+                <p>
+                    For registration and general information about the challenge, please contact:
+                    <ul>
+                        <li>Xindi Shang, Donglin Di and Junbin Xiao</li>
+                        <li><a href="mailto:shangxin@comp.nus.edu.sg,donglin.di@u.nus.edu,xiaojunbin@u.nus.edu">
+                            shangxin@comp.nus.edu.sg, donglin.di@u.nus.edu, xiaojunbin@u.nus.edu
+                        </a></li>
+                    </ul>
+                    For information about Task 1, please contact:
+                    <ul>
+                        <li>Junbin Xiao</li>
+                        <li><a href="mailto:xiaojunbin@u.nus.edu">xiaojunbin@u.nus.edu</a></li>
+                    </ul>
+                    For information about Task 2, please contact:
+                    <ul>
+                        <li>Donglin Di</li>
+                        <li><a href="mailto:donglin.di@u.nus.edu">donglin.di@u.nus.edu</a></li>
+                    </ul>
+                    For information about Task 3, please contact:
+                    <ul>
+                        <li>Xindi Shang</li>
+                        <li><a href="mailto:shangxin@comp.nus.edu.sg">shangxin@comp.nus.edu.sg</a></li>
+                    </ul>
+                </p>
+            </div>
+        </section>
+
+        <footer class="footer" style="padding-top: 50px;">
+            <div class="container">
+                <hr>
+                <p style="font-style: italic; text-align: center">
+                    Copyright &copy; 2018-2020 NExT++ /
+                    <a class="black" href="http://www.nextcenter.org/privacy-policy">Privacy Policy</a> /
+                    <a class="black" href="http://www.nextcenter.org/terms-conditions">Terms &amp; Conditions</a>
+                </p>
+            </div>
+        </footer>
+
+        <script type="text/javascript" src="scripts/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+        <script type="text/javascript" src="scripts/jquery.easing.min.js"></script>
+        <script type="text/javascript" src="scripts/scrolling-nav.js"></script>
+    </body>
+</html>

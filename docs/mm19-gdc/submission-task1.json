@@ -1,0 +1,29 @@
+{
+    "version": "VERSION 1.0",
+    "results": {
+        "8173050335": [
+            {
+                "category": "dog",
+                "score": 0.8943,
+                "trajectory": {
+                    "5": [9, 10, 45, 20],
+                    "6": [10, 17, 46, 22],                   
+                    "17": [11, 12, 40, 25],
+                    "19": [13, 12, 43, 27]
+                }
+            },
+            {
+                "category": "adult",
+                "score": 0.6626,
+                "trajectory": { 
+                    "0": [89, 10, 128, 80], 
+                    "1": [90, 10, 128, 79]
+                }
+            }
+        ]
+    },
+    "external_data": {
+        "used": true,
+        "details": "First fully-connected layer from VGG-16 pre-trained on ILSVRC-2012 training set"
+    }
+}

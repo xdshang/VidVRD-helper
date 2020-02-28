@@ -35,38 +35,38 @@
     padding-top: 50px;
     margin-bottom: -50px;
 }
-.scrollable-section .speaker {
+.scrollable-section .organizer {
     text-align:center
 }
-.scrollable-section .speaker a:hover, a:active, a:focus{
+.scrollable-section .organizer a:hover, a:active, a:focus{
     text-decoration: none;
     outline: none;
 }
-.scrollable-section .speaker .speaker-image {
+.scrollable-section .organizer .organizer-image {
     width:75%;
     margin:0 auto;
     padding:0.4rem;
     height:auto;
     margin-bottom:10px
 }
-.scrollable-section .speaker .speaker-image .speaker-avatar {
+.scrollable-section .organizer .organizer-image .organizer-avatar {
     display: inline;
     border-radius:50%;
     transition:all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     -webkit-transition:all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     -moz-transition:all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67)
 }
-.scrollable-section .speaker .speaker-image .speaker-avatar:hover {
+.scrollable-section .organizer .organizer-image .organizer-avatar:hover {
     transform:scale(1.05)
 }
-.scrollable-section .speaker .speaker-meta .speaker-name {
+.scrollable-section .organizer .organizer-meta .organizer-name {
     font-weight: bold;
     color: #555555;
-    margin-bottom:5px
+    margin-bottom: 5px
 }
-.scrollable-section .speaker .speaker-meta .speaker-affiliate {
+.scrollable-section .organizer .organizer-meta .organizer-affiliate {
     color:#666;
-    margin-bottom:0
+    margin-bottom: 10px
 }
 
 .comment {

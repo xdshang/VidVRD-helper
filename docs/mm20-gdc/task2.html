@@ -37,7 +37,7 @@
 
                 <div class="collapse navbar-collapse" id="navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a class="page-scroll" href="../index.html">Overall</a></li>
+                        <li><a class="page-scroll" href="../index.html">Overview</a></li>
                         <li><a class="page-scroll" href="../index.html#participation">Participation</a></li>
                         <li><a class="page-scroll" href="../index.html#timeline">Timeline</a></li>
                         <li><a class="page-scroll" href="../index.html#contact">Contact</a></li>
@@ -52,22 +52,17 @@
                 <h3>Optional Task: Video Object Detection</h3>
                 <p>
                     Object detection is the first step towards relation understanding in videos.
-                    The main goal of this task is to develop robust object detectors
-                        that not only localize objects from the 80 categories with bounding boxes in every video frame
+                    This task requires participants to develop robust object detectors
+                        that not only localize objects of certain categories with bounding boxes in every video frame
                         but also link the bounding boxes that indicate same object entity into a trajectory.
-                    The task requires participants to develop real video object detectors
-                        that can understand the identities and dynamics of object entities at video level,
+                    This will help machine to understand the identities and dynamics of object entities at video level,
                         which can benefit many applications that require fine-grained video understanding.
-                    The challenge will accelerate the research on robust object detection in videos in the wild,
+                    Furthermore, we hope it can accelerate the research on robust video object detection in the wild,
                         by providing a larger number of user generated videos with annotations.
-                    Additionally, the challenge will encourage the research on video object detection with relationships by providing relation 
-                    annotation in the dataset. An expectable challenge in this task is that, the detectors should 
-                    be able to re-identify objects which appear again after long-term disappearance. Technically, the detectors have to overcome
-                    difficulties from two aspects:
-                    <ul>
-                        <li>video quality like free camera motion, illumination, and blurring.</li>
-                        <li>object variation, like occlusion, and deformable shape.</li>
-                    </ul>
+                    An expectable challenge of this task is that, the detectors should 
+                    be able to re-identify an object which disappears sometime in a video. 
+                    Technically, the detectors have to overcome difficulties from video quality (e.g. free camera motion, 
+                    illumination and blurring) and object variation (e.g. occlusion and deformable shape).
                 </p>
             </div>
         </section>
@@ -75,15 +70,16 @@
             <div class="container">
                 <h3>Dataset</h3>
                 <p>
-                    The VidOR dataset for this task consists of 10K user-generated videos from Flickr, 
+                    The VidOR dataset for this task consists of user-generated videos from Flickr, 
                     along with annotations on 80 categories of object (e.g., "adult", "child", "dog", "table"). Bounding boxes are annotated
                     for objects in each frame, and the objects' identities among frames are also provided. The training/validation/testing splits
                     are 7,000, 835 and 2,165 videos. Specially, if the object just shows part of its body in the image (e.g., a hand of a person),
                     it is also annotated in this dataset.
                 </p>
                 <p>
-                    The videos and annotations can be downloaded directly from <a href="https://xdshang.github.io/docs/vidor.html#downloads" target="_blank">here</a>.
-                    Please note that the downloaded annotations contain additional annotation of relations.
+                    The videos and annotations of the training and validation sets can be downloaded directly from 
+                    <a href="https://xdshang.github.io/docs/vidor.html#downloads" target="_blank">here</a>.
+                    Note that the downloaded annotations contain additional annotation of relations.
                     This task allows participants to use them to train the object detection models.
                 </p>
             </div>
@@ -92,20 +88,23 @@
             <div class="container">
                 <h3>Evaluation Metric</h3>
                 <p>
-                    We adopt average precision (AP) as metric to evaluate the detection performance for each category. The trajectory-level 
+                    We adopt average precision (AP) as metric to evaluate the detection performance for each object category. The trajectory-level 
                     mean AP (mAP) is defined as follows:
-                    <br>
+                </p>
+                <p>
                     Given a predicted trajectory (a.k.a. tubelet) $\mathcal{T}_p$ and a ground truth 
-                    trajectory $\mathcal{T}_g$ of a certain category, the temporal Intersection over Union (tIoU) between these two trajectories is defined by:
+                    trajectory $\mathcal{T}_g$ of a certain category, the temporal Intersection over Union (tIoU) between these two trajectories is calculated as:
                         $$\text{tIoU}(\mathcal{T}_p, \mathcal{T}_g)=\frac{D_p \cap D_g}{D_p\cup D_g}, $$
                     where $D_p$, $D_g$ denote the time duration of the predicted trajectory and the ground truth trajectory respectively. In out settings, the threshold for \( \text{tIoU} \) is 0.5,
                     which means any result with \( \text{tIoU} \geq 0.5 \) will be regarded as true positive prediction. Besides, the \( \text{IoU} \) threshold for frame-level bounding box is set to (0.5, 0.7, 0.9). For each trajectory pair,
-                    their \( \text{tIoU} \) is averaged on the three frame-level IoU values. The final mAP is obtained by averaging the APs across all categories. Note that we will not independently evaluate the image-level detection performance in this challenge.
+                    their \( \text{tIoU} \) is averaged on the three frame-level IoU values. 
+                </p>
+                <p>
+                    We only consider the top-200 predictions for each video. The final mAP is obtained by averaging the APs across all the object categories.
                 </p>
                 <p>
                     The evaluation code used by the evaluation server can be found
                     <a href="https://github.com/NExTplusplus/VidVRD-helper/blob/master/evaluation/video_object_detection.py" target="_blank">here</a>.
-                    The number of predictions per video is limited up to 200.
                 </p>
             </div>
         </section>
@@ -113,7 +112,9 @@
             <div class="container">
                 <h3>Submission Format</h3>
                 <p>
-                    Please use the following JSON format when submitting your results for the challenge:
+                    Please use the following JSON format to submit your results to the submission/evaluation server.
+                    Before uploading the result, please compress the JSON file using ZIP and make sure the final file size 
+                    not exceed 200MB.
                 </p>
                 <pre id="sample"></pre>
                 <p>

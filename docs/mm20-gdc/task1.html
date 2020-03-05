@@ -37,7 +37,7 @@
 
                 <div class="collapse navbar-collapse" id="navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a class="page-scroll" href="../index.html">Overall</a></li>
+                        <li><a class="page-scroll" href="../index.html">Overview</a></li>
                         <li><a class="page-scroll" href="../index.html#participation">Participation</a></li>
                         <li><a class="page-scroll" href="../index.html#timeline">Timeline</a></li>
                         <li><a class="page-scroll" href="../index.html#contact">Contact</a></li>
@@ -56,7 +56,9 @@
                     including appearance, action, intention, and interactions between them. 
                     Specifically, it aims to detect instances of visual relations of interest in a video, 
                     where a visual relation instance is represented by a relation triplet &lt;subject,predicate,object&gt;
-                    with the bounding-box trajectories of the subject and object during the relation happening (as shown in Figure 1). 
+                    with the bounding-box trajectories of the subject and object during the relation happening (as shown in Figure 1).
+                    Note that the detection of social relations (e.g. “is parent of”) and emotional relations (e.g. “like”) is outside the 
+                    scope of this task.
                 </p>
                 <figure class="figure" style="margin-bottom: 12px;">
                     <a href="https://xdshang.github.io/docs/imagenet-vidvrd.html" target="_blank">
@@ -67,13 +69,8 @@
                     </figcaption>
                 </figure>
                 <p>    
-                    This challenge offers the first large scale video dataset for VRD
-                    and intends to pave the way for the research on relation understanding in videos.
-                    In the task, participants are encouraged to develop methods that can not only recognize a wide range of visual relations
-                    from 80 object categories and 50 predicate categories, but also spatio-temporally localize various visual relation instances 
-                    in a user-generated video.
-                    Note that the detection of social relations (e.g. “is parent of”) and emotional relations (e.g. “like”) is outside the 
-                    scope of this task.
+                    *To facilitate participation, some precomputed features and bounding box trajectories will be released in this year's challenge.
+                    Participants can but not necessarily use them in their development.
                 </p>
             </div>
         </section>
@@ -81,12 +78,13 @@
             <div class="container">
                 <h3>Dataset</h3>
                 <p>
-                    The VidOR dataset for this task consists of 10K user-generated videos from Flickr 
+                    The VidOR dataset for this task consists of user-generated videos from Flickr 
                     and annotations on 80 categories of object (e.g. "adult", "child", "dog", "table"), 42 categories of verb (action) predicate 
                     (e.g. "watch", "grab", and "hug") and 8 categories of spatial predicate (e.g. "in front of", "inside", "towards").
                     In the annotations, each relation instance is labeled and localized in the same way as the instances shown in 
                     Figure 1 (e.g. "dog-chase-frisbee" from t2 to t4). The training/validation/testing splits are 7,000, 835 and 2,165 videos.
-                    The videos and annotations can be downloaded directly from <a href="https://xdshang.github.io/docs/vidor.html#downloads" target="_blank">here</a>.
+                    The videos and annotations of the training and validation sets can be downloaded directly from 
+                    <a href="https://xdshang.github.io/docs/vidor.html#downloads" target="_blank">here</a>.
                 </p>
             </div>
         </section>
@@ -111,11 +109,11 @@
                         </li>
                     </ul>
                     The term \( \text{vIoU} \) refers to the voluminal Intersection over Union.
+                    While calculating the score, we only consider the top-200 predictions for each video.
                 </p>
                 <p>
                     The evaluation code used by the evaluation server can be found
                     <a href="https://github.com/NExTplusplus/VidVRD-helper/blob/master/evaluation/visual_relation_detection.py" target="_blank">here</a>.
-                    The number of predictions per video is limited up to 2000.
                 </p>
             </div>
         </section>
@@ -123,7 +121,9 @@
             <div class="container">
                 <h3>Submission Format</h3>
                 <p>
-                    Please use the following JSON format when submitting your results for the challenge:
+                    Please use the following JSON format to submit your results to the submission/evaluation server.
+                    Before uploading the result, please compress the JSON file using ZIP and make sure the final file size 
+                    not exceed 200MB.
                 </p>
                 <pre id="sample"></pre>
                 <p>

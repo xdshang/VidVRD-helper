@@ -59,44 +59,47 @@
             <div class="container">
                 <h3>Introduction</h3>
                 <p>
-                    For decades, researchers mainly evaluate multimedia systems according to a set of
-                    application-driven tasks, such as the cross-modal retrieval and concept annotation etc.
-                    Although the recent advance in computer vision has effectively boosted the
-                    performance of multimedia systems on these tasks, a core question still cannot be explicitly
-                    answered: Does the machine understand what is happening in a video, and can the results of the
-                    analysis be interpretable by human users? Another way to look at the limitation is to evaluate
-                    how many facts that the machine can recognize from a video.
+                    Although the recent advance in computer vision has effectively boosted the performance of multimedia
+                    systems, a core question still cannot be explicitly answered: Does the machine understand what is
+                    happening in a video, and are the results of the analysis interpretable by human users? Another way to
+                    look at the limitation is to evaluate how many facts the machine can recognize from a video. In many
+                    AI and knowledge-based systems, a fact is represented by a relation between a subject entity and an
+                    object entity <i>(a.k.a. &lt;subject,predicate,object&gt;)</i>, which forms the fundamental building block for 
+                    complex inferences and decision-making tasks.
                 </p>
                 <p>
-                    Video Relation Understanding (VRU) Challenge
-                    will encourage researchers to explore a key aspect of recognizing
-                    facts from a video, that is relation understanding. In many AI and knowledge-based systems,
-                    a fact is represented by a relation between a subject entity and an object entity (i.e.
-                    &lt;subject,predicate,object&gt;), which forms the fundamental building block for high-level
-                    inference and decision making tasks. The challenge is based on
-                    <a href="https://xdshang.github.io/docs/vidor.html" style="color: #ff6600;">VidOR Dataset</a>,
-                    a large-scale user-generated video dataset with objects and relations densly annotated.
-                    Different from last year, 
-                    this year's challenge will focus on the challenging task of visual relation detection to push the limits of relation understanding.
+                    As a key aspect of recognizing facts, Video Relation Understanding (VRU) is very challenging since it requires
+                    the system to understand many perspectives of the two entities, including appearance, action, speech,
+                    and interactions between them. In order to detect and recognize the relations in videos accurately, a
+                    system must recognize not only the features in these perspectives, but also the large variance in relation
+                    representation. This year’s VRU challenge encourages researchers to explore and develop innovative models and 
+                    algorithms to detect object entities and the relationships between each pair of them in a given video. 
                 </p>
                 <h5>
-                    <a href="task1.html"><i>Main Task: Visual Relation Detection</i></a>
+                    <a href="https://xdshang.github.io/docs/vidor.html" style="color: #ff6600;"><i>Dataset: VidOR</i></a>
                 </h5>
                 <p>
-                    Beyond recognizing object and action individually, this task is to detect relation triplets (i.e.
-                    &lt;subject,predicate,object&gt;) of interest and spatio-temporally localize the subject and object of
-                    each detected relation triplet using bounding-box trajectories. The categories of predicate
-                    will also include spatial type in addition to the action type. For each testing video, we compute AP
-                    to evaluate the detection performance and rank according to the mean AP over all testing videos.
+                    This benchmark dataset contains 10,000 user-generated videos (98.6 hours) from YFCC100M.
+                    It is spatial-temporally annotated with 80 categories of objects 
+                    <i>(e.g. adult, dog, toy)</i> and 50 categories of relationships <i>(e.g. next to, watch, hold)</i>. 
+                </p>
+                <h5>
+                    <a href="task1.html" style="color: #e30000;"><i>Main Task: Visual Relation Detection</i></a>
+                </h5>
+                <p>
+                    This task is to detect relation triplets <i>(i.e. &lt;subject,predicate,object&gt;)</i> of interest and 
+                    spatio-temporally localize the subject and object of each detected relation triplet using bounding-box trajectories.
+                    For each testing video, we compute Average Precision to evaluate the detection performance and rank according 
+                    to the mean AP over all the testing videos.
                 </p>
                 <h5>
                     <a href="task2.html"><i>Optional Task: Video Object Detection</i></a>
                 </h5>
                 <p>
-                    As the first step in relation understanding, the task is to detect objects of certain categories
+                    As the first step in relation detection, this task is to detect objects of certain categories
                     and spatio-temporally localize each detected object using a bounding-box trajectory in videos.
-                    For each object category, we compute Average Precision (AP) to evaluate the detection performance
-                    and rank according to the mean AP over all categories.
+                    For each object category, we compute Average Precision to evaluate the detection performance
+                    and rank according to the mean AP over all the categories.
                 </p>
             </div>
         </section>
@@ -105,14 +108,17 @@
             <div class="container">
                 <h3>Participation</h3>
                 <p>
-                    The challenge is a team-based contest. Each team can have one or more members, and an individual cannot
-                    be a member of multiple teams in a task. Registration page will be available soon...
+                    This challenge is a team-based competition. Each team can have one or more members, and an individual cannot
+                    be a member of multiple teams. To register, please create an account and form teams in the 
+                    <a href="http://www.nextcenter.org/" target="_blank">submission/evaluation server</a> (coming soon...).
                 </p>
                 <p>
-                    At the end of the challenge, all teams will be ranked based on the objective evaluation above.
-                    The top three performing teams of each task will receive award certificates.
-                    At the same time, by submitting a 4-page overview paper (plus 1-page reference) to ACM MM'20,
-                    all accepted submissions are eligible for the conference’s grand challenge award competition.
+                    At the end of the challenge, all teams will be ranked based on the objective evaluation metrics,
+                    and the leaderboard of both tasks will be public on this website.
+                    To be eligible for ACM MM'20 grand challenge award competition, each team need further submit 
+                    a 4-page overview paper (plus 1-page reference) to the conference's grand challenge track.
+                    The top three teams in terms of both the solution novelty and the ranking in the main task 
+                    will receive award certificates.
                 </p>
             </div>
         </section>
@@ -121,11 +127,11 @@
             <div class="container">
                 <h3>Timeline</h3>
                 <ul>
-                    <li>March 10, 2020: Website ready; training and validation data available for download</li>
-                    <li>April 29, 2020: Registration close; online submission and live evaluation server open</li>
-                    <li>May 29, 2020: Testing videos open to registered participants for download</li>
-                    <li>June 29, 2020, 23:59 AoE: Results submission close</li>
-                    <li>July 1, 2020: Evaluation results announce on the website</li>
+                    <li>March 10, 2020: Website ready and call for registration</li>
+                    <li>April 29, 2020: Registration close and submission/evaluation server open</li>
+                    <li>May 29, 2020: Testing videos open to the registered participants</li>
+                    <li>June 29, 2020, 23:59 AoE: Submission/evaluation server close</li>
+                    <li>July 1, 2020: Final evaluation results announce on the website</li>
                     <li>July 8, 2020: Paper submission deadline</li>
                 </ul>
             </div>
@@ -210,21 +216,31 @@
                 </div>
                 <br>
                 <p>
-                    For general information about the challenge, please contact:
+                    For general information about this challenge, please contact:
                     <ul>
                         <li>Xindi Shang and Xiaoyu Du</li>
+                        <li><a href="mailto:shangxin@comp.nus.edu.sg,duxy.me@gmail.com">
+                            shangxin@comp.nus.edu.sg, duxy.me AT gmail.com
+                        </a></li>
                     </ul>
                     For information about Task 1, please contact:
                     <ul>
-                        <li>Xindi Shang and Tongwei Ren</li>
+                        <li>Tongwei Ren and Xindi Shang</li>
+                        <li><a href="mailto:rentw@nju.edu.cn,shangxin@comp.nus.edu.sg">
+                            rentw@nju.edu.cn, shangxin@comp.nus.edu.sg
+                        </a></li>
                     </ul>
                     For information about Task 2, please contact:
                     <ul>
                         <li>Junbin Xiao</li>
+                        <li><a href="mailto:xiaojunbin@u.nus.edu">xiaojunbin@u.nus.edu</a></li>
                     </ul>
                     For reporting issue on the submission/evaluation server, please contact:
                     <ul>
-                        <li>Jonathan Staniforth</li>
+                        <li>Jonathan Staniforth and Xiaoyu Du</li>
+                        <li><a href="mailto:dcsjon@nus.edu.sg,duxy.me@gmail.com">
+                            dcsjon@nus.edu.sg, duxy.me AT gmail.com
+                        </a></li>
                     </ul>
                 </p>
             </div>

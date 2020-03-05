@@ -33,7 +33,7 @@
 .scrollable-section {
     height: 100%;
     padding-top: 50px;
-    margin-bottom: -50px;
+    margin-bottom: -20px;
 }
 .scrollable-section .organizer {
     text-align:center

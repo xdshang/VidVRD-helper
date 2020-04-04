@@ -1,13 +1,14 @@
-There are two ways to run the evaluation codes:
+To run the evaluation codes, you can run `evaluate.py` from the parent directory as follows.
+```
+python evaluate.py [dataset_name] [split_name] [task_name] [path_to_compressed_prediction_json]
+```
+The compressed prediction json file should be in `xz` compression format and can be produced by the following code.
+```
+import json
+import lzma
 
-If you a single ground truth JSON file, you can run the corresponding script from **the parent directory** as follows
-(for the example of visual relation detection evaluation).
-```
-python -m evaluation.visual_relation_detection [path_to_groundtruth_json] [path_to_prediction_json]
-```
-If you want to load the ground truth directly from a dataset, you can run `evaluate.py` in the parent directory as follows.
-```
-python evaluate.py [dataset_name] [split_name] [task_name] [path_to_prediction_json]
+with lzma.open('prediction.json.xz', 'wt') as four:
+    json.dump(prediction, fout, separators=(',', ':'))
 ```
 
 #### Prediction JSON Format for Visual Relation Detection
@@ -54,4 +55,4 @@ python evaluate.py [dataset_name] [split_name] [task_name] [path_to_prediction_j
 ```
 
 #### Prediction JSON Format for Visual Object Detection
-Please refer to this [page](https://videorelation.nextcenter.org/task1)
+Please refer to this [page](https://videorelation.nextcenter.org/mm20-gdc/task2.html)

@@ -6,7 +6,7 @@ from collections import defaultdict
 
 from tqdm import tqdm
 
-from dataset import VidVRD
+from dataset import ImagenetVidVRD
 from baseline import segment_video, get_model_path
 from baseline import trajectory, feature, model, association
 

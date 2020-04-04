@@ -1,7 +1,8 @@
 import json
+import lzma
 import argparse
 
-from dataset import VidVRD, VidOR
+from dataset import ImagenetVidVRD, VidOR
 from evaluation import eval_video_object, eval_visual_relation
 
 
@@ -43,7 +44,7 @@ if __name__ == '__main__':
     parser.add_argument('prediction', type=str, help='Corresponding prediction JSON file')
     args = parser.parse_args()
 
-    if args.dataset=='vidvrd':
+    if args.dataset=='imagenet-vidvrd':
         if args.task=='relation':
             # load train set for zero-shot evaluation
             dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', ['train', args.split])
@@ -59,7 +60,7 @@ if __name__ == '__main__':
         raise Exception('Unknown dataset {}'.format(args.dataset))
 
     print('Loading prediction from {}'.format(args.prediction))
-    with open(args.prediction, 'r') as fin:
+    with lzma.open(args.prediction, 'rt') as fin:
         pred = json.load(fin)
     print('Number of videos in prediction: {}'.format(len(pred['results'])))
 

@@ -1,2 +1,2 @@
-from .vidvrd import VidVRD
+from .imagenet_vidvrd import ImagenetVidVRD
 from .vidor import VidOR

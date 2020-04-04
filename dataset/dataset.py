@@ -102,7 +102,7 @@ class Dataset(object):
         else:
             for s in self.split_index.keys():
                 if split in s:
-                    print('INFO: infer the split name \'{}\' in this dataset from \'{}\''.format(s, split))
+                    print('[info] infer the split name \'{}\' in this dataset from \'{}\''.format(s, split))
                     return self.split_index[s]
             else:
                 raise Exception('Unknown split "{}" in the loaded dataset'.format(split))

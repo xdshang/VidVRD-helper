@@ -3,7 +3,7 @@ import lzma
 import argparse
 
 from dataset import ImagenetVidVRD, VidOR
-from evaluation import eval_video_object, eval_visual_relation
+from evaluation import eval_video_object, eval_video_relation
 
 
 def evaluate_object(dataset, split, prediction):
@@ -17,7 +17,7 @@ def evaluate_relation(dataset, split, prediction):
     groundtruth = dict()
     for vid in dataset.get_index(split):
         groundtruth[vid] = dataset.get_relation_insts(vid)
-    mean_ap, rec_at_n, mprec_at_n = eval_visual_relation(groundtruth, prediction)
+    mean_ap, rec_at_n, mprec_at_n = eval_video_relation(groundtruth, prediction)
     # evaluate in zero-shot setting
     print('-- zero-shot setting')
     zeroshot_triplets = dataset.get_triplets(split).difference(
@@ -33,23 +33,27 @@ def evaluate_relation(dataset, split, prediction):
         if len(zs_gt_relations) > 0:
             groundtruth[vid] = zs_gt_relations
             zs_prediction[vid] = prediction[vid]
-    mean_ap, rec_at_n, mprec_at_n = eval_visual_relation(groundtruth, zs_prediction)
+    mean_ap, rec_at_n, mprec_at_n = eval_video_relation(groundtruth, zs_prediction)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Evaluate a set of tasks related to video relation understanding.')
-    parser.add_argument('dataset', type=str, help='the dataset name for evaluation')
-    parser.add_argument('split', type=str, help='the split name for evaluation')
+    parser.add_argument('dataset', choices=['imagenet-vidvrd', 'vidor'], help='the dataset name for evaluation')
+    parser.add_argument('split', choices=['validation', 'testing'], help='the split name for evaluation')
     parser.add_argument('task', choices=['object', 'relation'], help='which task to evaluate')
     parser.add_argument('prediction', type=str, help='Corresponding prediction JSON file')
     args = parser.parse_args()
 
     if args.dataset=='imagenet-vidvrd':
+        if args.split=='testing':
+            args.split = 'test'
+        else:
+            print('[warning] there is no validation set in ImageNet-VidVRD dataset')
         if args.task=='relation':
             # load train set for zero-shot evaluation
-            dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', ['train', args.split])
+            dataset = ImagenetVidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', ['train', args.split])
         else:
-            dataset = VidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', [args.split])
+            dataset = ImagenetVidVRD('../vidvrd-dataset', '../vidvrd-dataset/videos', [args.split])
     elif args.dataset=='vidor':
         if args.task=='relation':
             # load train set for zero-shot evaluation

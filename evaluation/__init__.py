@@ -1,2 +1,2 @@
 from .video_object_detection import evaluate as eval_video_object
-from .visual_relation_detection import evaluate as eval_visual_relation
+from .video_relation_detection import evaluate as eval_video_relation

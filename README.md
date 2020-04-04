@@ -4,10 +4,10 @@ This repository contains some helper functions for the convenient usage of
 [ImageNet-VidVRD dataset](https://xdshang.github.io/docs/imagenet-vidvrd.html)
 and [VidOR dataset](https://xdshang.github.io/docs/vidor.html). 
 It also contains scripts for evaluating several relevant tasks, i.e.
-*video object detection* and *visual relation detection*.
+*video object detection* and *video relation detection*.
 
 Please note that the enclosed *baseline* does not serve as general baseline for
-those tasks. You can ignore it if you are not working with the VidVRD dataset.
+those tasks. You can ignore it if you are not working with ImageNet-VidVRD dataset.
 
 Please cite the following papers if the datasets help your research:
 ```

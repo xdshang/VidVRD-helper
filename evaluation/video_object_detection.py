@@ -74,16 +74,15 @@ def evaluate(gt, pred, use_07_metric=True, top_returns=20, thresh_t=0.5):
         class_recs = {}
 
         for vid in gt:
-            #print(vid)
             gt_trajs = [trk['trajectory'] for trk in gt[vid] if trk['category'] == c]
             det = [False] * len(gt_trajs)
             npos += len(gt_trajs)
             class_recs[vid] = {'trajectories': gt_trajs, 'det': det}
 
         trajs = result_class[c]
-        vids = [trj[0] for trj in trajs]
-        scores = np.array([trj[1] for trj in trajs])
-        trajectories = [trj[2] for trj in trajs]
+        vids = [trj[0] for trj in trajs if trj[0] in gt]
+        scores = np.array([trj[1] for trj in trajs if trj[0] in gt])
+        trajectories = [trj[2] for trj in trajs if trj[0] in gt]
 
         nd = len(vids)
         fp = np.zeros(nd)

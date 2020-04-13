@@ -11,6 +11,7 @@ def evaluate_object(dataset, split, prediction):
     for vid in dataset.get_index(split):
         groundtruth[vid] = dataset.get_object_insts(vid)
     mean_ap, ap_class = eval_video_object(groundtruth, prediction)
+    return mean_ap, ap_class
 
 
 def evaluate_relation(dataset, split, prediction):
@@ -33,7 +34,8 @@ def evaluate_relation(dataset, split, prediction):
         if len(zs_gt_relations) > 0:
             groundtruth[vid] = zs_gt_relations
             zs_prediction[vid] = prediction[vid]
-    mean_ap, rec_at_n, mprec_at_n = eval_video_relation(groundtruth, zs_prediction)
+    zs_mean_ap, zs_rec_at_n, zs_mprec_at_n = eval_video_relation(groundtruth, zs_prediction)
+    return mean_ap, rec_at_n, mprec_at_n, zs_mean_ap, zs_rec_at_n, zs_mprec_at_n
 
 
 if __name__ == '__main__':

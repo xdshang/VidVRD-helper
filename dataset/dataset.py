@@ -20,6 +20,8 @@ class Dataset(object):
         """
         self.anno_rpath = anno_rpath
         self.video_rpath = video_rpath
+        if not isinstance(splits, list):
+            splits = [splits]
         self._load_annotations(splits)
 
     def _load_annotations(self, splits):
@@ -193,6 +195,8 @@ class DatasetV1(Dataset):
         self.anno_rpath = anno_rpath
         self.video_rpath = video_rpath
         self.low_memory = low_memory
+        if not isinstance(splits, list):
+            splits = [splits]
         self._load_annotations(splits)
 
     def _check_anno(self, anno):

@@ -20,7 +20,7 @@ def evaluate_relation(dataset, split, prediction):
         groundtruth[vid] = dataset.get_relation_insts(vid)
     mean_ap, rec_at_n, mprec_at_n = eval_video_relation(groundtruth, prediction)
     # evaluate in zero-shot setting
-    print('-- zero-shot setting')
+    print('[info] zero-shot setting')
     zeroshot_triplets = dataset.get_triplets(split).difference(
             dataset.get_triplets('train'))
     groundtruth = dict()
@@ -33,7 +33,7 @@ def evaluate_relation(dataset, split, prediction):
                 zs_gt_relations.append(r)
         if len(zs_gt_relations) > 0:
             groundtruth[vid] = zs_gt_relations
-            zs_prediction[vid] = prediction[vid]
+            zs_prediction[vid] = prediction.get(vid, [])
     zs_mean_ap, zs_rec_at_n, zs_mprec_at_n = eval_video_relation(groundtruth, zs_prediction)
     return mean_ap, rec_at_n, mprec_at_n, zs_mean_ap, zs_rec_at_n, zs_mprec_at_n
 

@@ -115,7 +115,7 @@ def evaluate(gt, pred, use_07_metric=True, top_returns=20, thresh_t=0.5):
         prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps)
         ap = voc_ap(rec, prec, use_07_metric)
 
-        ap_class[c] = ap
+        ap_class[c] = round(float(ap), 4)
 
     # compute mean ap and print
     print('=' * 30)
@@ -124,7 +124,7 @@ def evaluate(gt, pred, use_07_metric=True, top_returns=20, thresh_t=0.5):
     for i, (category, ap) in enumerate(ap_class):
         print('{:>2}{:>20}\t{:.4f}'.format(i+1, category, ap))
         total_ap += ap
-    mean_ap = total_ap / gt_class_num
+    mean_ap = round(float(total_ap / gt_class_num), 4)
     print('=' * 30)
     print('{:>22}\t{:.4f}'.format('mean AP', mean_ap))
 

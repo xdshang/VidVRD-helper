@@ -96,7 +96,7 @@ def evaluate(groundtruth, prediction, top_returns=200, viou_threshold=0.5, det_r
             else:
                 prec_at_n[nre].append(0.)
     # calculate mean ap for detection
-    mean_ap = np.mean(list(video_ap.values()))
+    mean_ap = float(np.mean(list(video_ap.values())))
     # calculate recall for detection
     rec_at_n = dict()
     for nre in det_recall_at_n:
@@ -106,11 +106,11 @@ def evaluate(groundtruth, prediction, top_returns=200, viou_threshold=0.5, det_r
         tps = tps[sort_indices]
         cum_tp = np.cumsum(tps).astype(np.float32)
         rec = cum_tp / np.maximum(tot_gt_relations, np.finfo(np.float32).eps)
-        rec_at_n[nre] = rec[-1]
+        rec_at_n[nre] = float(rec[-1])
     # calculate mean precision for tagging
     mprec_at_n = dict()
     for nre in tag_precision_at_n:
-        mprec_at_n[nre] = np.mean(prec_at_n[nre])
+        mprec_at_n[nre] = float(np.mean(prec_at_n[nre]))
     # print scores
     print('detection mean AP (used in challenge): {}'.format(mean_ap))
     print('detection recall@50: {}'.format(rec_at_n[50]))

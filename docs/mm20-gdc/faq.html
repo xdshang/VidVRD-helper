@@ -51,18 +51,71 @@
             <div class="container">
                 <h3>Frequently Asked Questions</h3>
                 <p>
-                    <b>Q1:</b> When will the submission server open for registration? <br>
+                    <b>Q1: What are the main functions of the submission server?</b> <br>
+                    <b>A:</b> Our submission server mainly serves for the following 4 purposes: <br>
+                    1. Register this challenge; <br>
+                    2. Submit validation results and compete with other registered teams in a non-public leaderboard; <br>
+                    3. Submit test results and peek the scores computed over a confidential subset of the test set; <br>
+                    4. Mark one of the submitted test results for final evaluation. After the submission deadline,
+                    the final evaluation will be conducted over the full test set and the final
+                    scores will be released in a public leaderboard at the challenge's main page.
+                </p>
+                <p>
+                    <b>Q2: When will the submission server open for registration?</b> <br>
                     <b>A:</b> On 10 March.
                 </p>
                 <p>
-                    <b>Q2:</b> How to participate in the tasks in this challenge? <br>
-                    <b>A:</b> For each task, team leader shall create an account and create an team for the task.
+                    <b>Q3: How to register this challenge?</b> <br>
+                    <b>A:</b> To register, each team has to join the <a href="./task1.html">main task</a>.
+                    To join a task, team leader shall create an account and create an team for the task.
                     Team members shall create their accounts as well, and join the team created by team leader
                     by asking the unique team token from team leader.
                 </p>
                 <p>
-                    <b>Q3:</b> When will the submission server fully open for submission? <br>
-                    <b>A:</b> By 29 April.
+                    <b>Q4: When will the submission server fully open for submission?</b> <br>
+                    <b>A:</b> On 29 April.
+                </p>
+                <p>
+                    <b>Q5: What is the submission flow?</b> <br>
+                    <b>A:</b> There are generally 4 steps from submitting your result to getting your score: <br>
+                    1. Click "Create Submission" after entering the corresponding task in the submission server; <br>
+                    2. Select a valid file and fill in necessary information, and then click "Upload". Upon successful
+                    upload, it will create a submission in the submission table with a status of "To be submitted".
+                    Click "view" to check the details of this submission; <br>
+                    3. Click "Submit" to command the server to evaluate this submission, and the status of this submission
+                    will change to "Evaluating"; <br>
+                    4. It might take a long time for the server to complete the evaluation when there are many
+                    submission. After completion, the status of this submission will change to "Succeed" and you can
+                    click "view" to see the score and some other evaluation details.
+                </p>
+                <p>
+                    <b>Q6: Is there any limit on the number of submissions?</b> <br>
+                    <b>A:</b> Yes, for each team, there is a submission limit of 6 per day for validation
+                    submissions and 3 per day for test submissions.
+                </p>
+                <p>
+                    <b>Q6: Why do I see the message: your team has reached the upload limit?</b> <br>
+                    <b>A:</b> There can only allow 1 submission whose status is "To be submitted" in the submission
+                    table. Please proceed to submit or discard that submission before making another sumbmission.
+                </p>
+                <p>
+                    <b>Q7: Why do I get an error in my score?</b> <br>
+                    <b>A:</b> It is very likely that your submitted file does not meet the required format.
+                    You can click "view" to see the detailed error message. Since the server uses the same evaluation 
+                    code as the <a href="https://github.com/NExTplusplus/VidVRD-helper" target="_blank">released</a>,
+                    you can debug based on that before making further submission.
+                </p>
+                <p>
+                    <b>Q8: When and where can I see my team's final score?</b> <br>
+                    <b>A:</b> You can find it at the challenge's <a href="../index.html"></a>main page</a> after July 1,
+                    subject to that your team has responsibly selected one of your test results for the
+                    final evaluation.
+                </p>
+                <p>
+                    <b>Q9: Why is the final score different from the one seen in the submission server?</b> <br>
+                    <b>A:</b> This is because in the submission server, the scores for test submissions are computed
+                    over a confidential subset of the test set, in order to avoid parameter tuning against the test set.
+                    However, the final score is computed over the full test set offline.
                 </p>
             </div>
         </section>

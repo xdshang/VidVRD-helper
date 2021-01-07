@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)https://videorelation.nextcenter.org/index.html#leaderboard -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        
+        <meta name="renderer" content="webkit">
+        <title>ACM'MM 2021 VideoQA Challenge</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="ACM Multimedia&#39;21 Grand Challenge">
+        <!--<base href="mm20-gdc/">--><base href=".">
+
+        <link href="./description-files/bootstrap.min.css" rel="stylesheet">
+        <link href="./description-files/common.css" rel="stylesheet">
+    </head>
+
+    <body data-spy="scroll" data-target=".navbar">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <h2 class="navbar-brand hidden-xs hidden-sm" style="padding-top: 0px;padding-bottom: 0px;height: 30px;line-height: 35px">
+                        <span class="logo">Video Question Answering</span>
+                    </h2>
+                    <h5 class="hidden-xs hidden-sm" style="margin-bottom: 0px">
+                        <span style="color:#003d7c !important;">ACM Multimedia 2021 Grand Challenge</span>
+                    </h5>
+                    <h2 class="navbar-brand hidden-md hidden-lg">
+                        <span class="logo">VideoQA Challenge</span>
+                    </h2>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+						<li class=""><a class="page-scroll" href="videoqa.html">Home</a></li>
+                        <li class=""><a class="page-scroll" href="#introduction">Introduction</a></li>
+                        <li class=""><a class="page-scroll" href="#statistics">Statistics</a></li>
+                        <li class=""><a class="page-scroll" href="#examples">Examples</a></li>
+                        <li class=""><a class="page-scroll" href="#download">Download</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        
+
+        <section id="introduction" class="scrollable-section">
+            <div class="container">
+                <h3>Introduction</h3>
+                <p>
+                     The videos in <strong>NExT-QA</strong> are featuring object interaction in daily life and are sourced from Flickr. Although we did not restrict the video content,
+					the videos are mostly about family time, kid playing, social gatherings, activities, pets and performances. We manually annotated an average 10 question-answer pairs for each video covering causal, temporal and descriptive questions. 
+					The distractor answers in multi-choice QA are retrieved from the dataset, and then go through a manual check to fix those problematic distractor answers, so as to make sure that they are challenging enough to disambiguate without understanding the videos.
+				</p>
+                
+            </div>
+        </section>
+		<section id="statistics" class="scrollable-section">
+            <div class="container">
+			<h3>Data Statistics</h3>
+                <p>
+                    <strong>NExT-QA</strong> contains totally 5431 videos with average length of 44s and about 52K manually annotated questions grouped into causal (50.3%),temporal (28.3%) and descriptive (21.4%) questions. We randomly split the data into train/val/test set according to videos: 3861/570/1000, in which
+					the 1000 test videos are held out for peer-comparison. Some statistics are shown in Table 1, other details are presented in our paper (to be released).
+                </p>
+			</div>
+			<div class="image-grid hidden-xs">
+					
+                    <img src="./description-files/distribution.png" alt="data split" width="900" height="700">
+            </div>
+        </section>
+		<section id="examples" class="scrollable-section">
+            <div class="container">
+			<h3>Examples</h3>
+                <h5>
+                    <i>C: Causal. T: Temporal D:Descriptive</i>
+                </h5>
+                <div class="image-grid hidden-xs">
+                    <embed src="./description-files/multi-exp-light-crop.pdf" width="900px" height="1165px" />
+                </div>
+			</div>
+        </section>
+		<section id="download" class="scrollable-section">
+            <div class="container">
+			<h3>Download</h3>
+                <p>
+                    Videos, annotations and pre-extracted features (optional) will be available for downloading soon...
+                </p>
+			</div>
+        </section>
+
+        <footer class="footer" style="padding-top: 50px;">
+            <div class="container">
+                <hr>
+                <p style="font-style: italic; text-align: center">
+                    Copyright © 2021-2025 NExT++ /
+                    <a class="black" href="http://www.nextcenter.org/privacy-policy">Privacy Policy</a> /
+                    <a class="black" href="http://www.nextcenter.org/terms-conditions">Terms &amp; Conditions</a> /
+                    <a class="black" href="faq.html">FAQs</a>
+                </p>
+            </div>
+        </footer>
+
+        <script type="text/javascript" src="./description-files/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="./description-files/bootstrap.min.js"></script>
+        <script type="text/javascript" src="./description-files/jquery.easing.min.js"></script>
+        <script type="text/javascript" src="./description-files/scrolling-nav.js"></script>
+    
+
+</body></html>

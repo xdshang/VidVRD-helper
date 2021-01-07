@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)https://videorelation.nextcenter.org/index.html#leaderboard -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        
+        <meta name="renderer" content="webkit">
+        <title>ACM'MM 2021 VideoQA Challenge</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="ACM Multimedia&#39;21 Grand Challenge">
+        <!--<base href="mm20-gdc/">--><base href=".">
+
+        <link href="./description-files/bootstrap.min.css" rel="stylesheet">
+        <link href="./description-files/common.css" rel="stylesheet">
+    </head>
+
+    <body data-spy="scroll" data-target=".navbar">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <h2 class="navbar-brand hidden-xs hidden-sm" style="padding-top: 0px;padding-bottom: 0px;height: 30px;line-height: 35px">
+                        <span class="logo">Video Question Answering</span>
+                    </h2>
+                    <h5 class="hidden-xs hidden-sm" style="margin-bottom: 0px">
+                        <span style="color:#003d7c !important;">ACM Multimedia 2021 Grand Challenge</span>
+                    </h5>
+                    <h2 class="navbar-brand hidden-md hidden-lg">
+                        <span class="logo">VideoQA Challenge</span>
+                    </h2>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class=""><a class="page-scroll" href="#introduction">Introduction</a></li>
+                        <li class=""><a class="page-scroll" href="#participation">Participation</a></li>
+                        <li><a class="page-scroll" href="#timeline">Timeline</a></li>
+                        <li><a class="page-scroll" href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section id="news" class="scrollable-section">
+            <div class="container">
+                <h3>News</h3>
+                <ul style="list-style-type:circle;">
+                    
+                    <li>
+                        Welcome to the 1st VideoQA challenge!!!
+                        
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="introduction" class="scrollable-section">
+            <div class="container">
+                <h3>Introduction</h3>
+                <p>
+                    <strong>Video Question Answering</strong> (<strong>VideoQA</strong>) is a task that requires the models to jointly analyze and reason on both the given video data and a related questions in natural language, to produce a answer relevant to the visual content. 
+					Solving this task would approach human-level intelligence of the models to cope with both complex video data and the visual content-related textual data, and presumably,
+					enrich human-machine interaction. While previous VideoQA benchmarks focus on a recognition of the objects (or their attributes), locations and actions in videos that are relevant to the questions (namely descriptive questions), 
+					we go beyond that to study the causal and temporal interactions between objects, which features dynamic video contents. Therefore, aside from asking questions starting with 'what/who/which/where/how many ... is/are', we are specially interested in
+					inference-type of questions, e.g., questions starting with <strong>'why/how ...'</strong>. A big difference between our dataset and visual commonsense reasoning is that we focus on uncovering the temporal and causal structure over different actions, 
+					and make sure that the answers are visible in the videos. 
+					<p>Basically, to tackle the challenges, the models not only have to implicitly align the liguistic concepts in the questions with the corresponding visual facts, but also
+					should be capable of reasoning the visual contextual to find the interested parts that might be related to the questioned contents causally and temporally, to determine the correct answers in <strong>Multi-choice QA </strong> or automatically generate the
+					answers in natural language in <strong> Open-ended QA </strong>. <br></p>
+
+                </p>
+                <p>
+                    SOTA methods jointly extract appearance and motion feature for video segments, and aggregate the local segment-level information into the global video-level representation for answer decoder, during which,
+					the interactions between vision (objects, frames and segments) and questions (words, phrases and sentence) are achieved by spatio-temporal attention, co-attention, multi-cycle co-memory, graph and hierarchical relation neural networks.
+					While these methods are excel at answering descriptive questions, our preliminary experiments demonstrate that they are weak in causal and temporal action reasoning and thus reveal huge possiblity for improvement on NExT-QA.
+                </p>
+                <h5>
+                    <i>Dataset: NExT-QA</i>
+                </h5>
+                <p>
+                    NExT-QA contains totally 5431 videos with average length of 44s and about 52K manually annotated questions grouped into causal,temporal and descriptive questions. We randomly split the data into train/val/test set according to videos: 3861/570/1000, in which
+					the 1000 test videos are held out for peer-comparison. <a href="nextqa.html" >... read more </a>
+                </p>
+                <h5>
+                    <i>Task 1: Multi-choice QA</i>
+                </h5>
+                <p>
+                    In multi-choice QA, the models are presented with 5 options (one correct answer plus 4 distractor answers), and are required to pick out the correct one. We report seperate <strong>accuracy</strong> for the 3 different types of questions.
+					<a href="multichoice.html">... read more</a>
+                </p>
+                <h5>
+                    <i>Task 2: Open-ended QA</i>
+                </h5>
+                <p>
+                    In open-ended QA, no candidate answers are available as inputs, and the models are required to automatically generate the answer in natural language according to the given videos and questions. We report <strong>WUPS</strong> score for performance evaluation. Open-ended QA challenges not only visual reasoning but also language generation which
+					is also an interesting research problem that can be hosted in VQA. Our preliminary experiments show that VideoQA models that are effective in multi-choice QA perform poorly in the open-ended scenario. Hopefully, this problem can be better solved by using pre-trained architectures. 
+					Hence, NExT-QA can also serve as a test-bed for pre-trained video-language techniques. <a href="openended.html">... read more </a>
+                </p>
+            </div>
+        </section>
+
+        <section id="participation" class="scrollable-section">
+            <div class="container">
+                <h3>Participation</h3>
+                <p>
+                    This challenge is a team-based competition. Each team can have one or more members, and an individual cannot
+                    be a member of multiple teams. To register, please create an account and form teams in 
+                    <a href="https://eval.ai/" target="_blank">EvalAI </a> which will be used for results submission and leardboard update.
+                </p>
+                <p>
+                    To be eligible for ACM MM'21 grand challenge award competition, each team is encouraged to submit 
+                    a 4-page overview paper (plus 1-page reference) to the conference's grand challenge track.
+                    The top three teams in terms of both the solution novelty and the ranking in the leaderboard 
+                    will receive award certificates and give presentation or poster at MM2021. Other protocals follow the MM Grand Challenge 2021.
+					Good luck and see you in Chengdu!
+                </p>
+            </div>
+        </section>
+
+        <section id="timeline" class="scrollable-section">
+            <div class="container">
+                <h3>Tenative Timeline</h3>
+                <ul>
+                    <li>Feb. 21, 2021: Website ready and call for registration</li>
+                    <li>Mar. 31, 2021: Precomputed features and trajectories release</li>
+                    <li>Apr. 29, 2021: Submission server fully open</li>
+                    <li>May. 29, 2021: Registration close; testing videos release to the registered participants</li>
+                    <li>Jul. 11, 2021, 23:59 AoE: submission deadline; submission server close</li>
+                    <li>Jul. 18, 2021: Final evaluation results announce on the website</li>
+                    <li>Jul. 30, 2021: Paper submission deadline</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="contact" class="scrollable-section">
+            <div class="container">
+                <h3>Organizers</h3>
+                <div class="col-12">
+                    <div class="row">
+						<div class="col-6 col-sm-4 section-column organizer">
+                            <div class="organizer-image">
+                                <img src="./description-files/Xiao-Junbin.png" class="img-responsive organizer-avatar" width="80%" height="auto">
+                            </div>
+                            <div class="organizer-meta">
+                                <h4 class="organizer-name">Junbin Xiao</h4>
+                                <p class="organizer-affiliate">National University of Singapore</p>
+                            </div>                       
+                        </div>
+						<div class="col-6 col-sm-4 section-column organizer">
+                            <div class="organizer-image">
+                                <img src="./description-files/Jiwei.jpg" class="img-responsive organizer-avatar" width="80%" height="auto">
+                            </div>
+                            <div class="organizer-meta">
+                                <h4 class="organizer-name">Wei Ji</h4>
+                                <p class="organizer-affiliate">National University of Singapore</p>
+                            </div>                       
+                        </div>
+						<div class="col-6 col-sm-4 section-column organizer">
+                            <a href="https://xdshang.github.io/" target="_blank">
+                            <div class="organizer-image">
+                                <img src="./description-files/Shang-Xindi.png" class="img-responsive organizer-avatar" width="80%" height="auto">
+                            </div>
+                            <div class="organizer-meta">
+                                <h4 class="organizer-name">Xindi Shang</h4>
+                                <p class="organizer-affiliate">National University of Singapore</p>
+                            </div>
+                            </a>
+                        </div>
+						<div class="col-6 col-sm-4 section-column organizer">
+                            <div class="organizer-image">
+                                <img src="./description-files/Tao-Zhulin.jpg" class="img-responsive organizer-avatar" width="80%" height="auto">
+                            </div>
+                            <div class="organizer-meta">
+                                <h4 class="organizer-name">Zhulin Tao</h4>
+                                <p class="organizer-affiliate">Communication University of China</p>
+                            </div>                       
+                        </div>  
+						<div class="col-6 col-sm-4 section-column organizer">
+                            <div class="organizer-image">
+                                <img src="./description-files/Yang-xun.png" class="img-responsive organizer-avatar" width="80%" height="auto">
+                            </div>
+                            <div class="organizer-meta">
+                                <h4 class="organizer-name">Xun Yang</h4>
+                                <p class="organizer-affiliate">National University of Singapore</p>
+                            </div>                       
+                        </div>  
+                        <div class="col-6 col-sm-4 section-column organizer">
+                            <a href="https://www.chuatatseng.com/" target="_blank">
+                            <div class="organizer-image">
+                                <img src="./description-files/Chua-TatSeng.png" class="img-responsive organizer-avatar" width="80%" height="auto">
+                            </div>
+                            <div class="organizer-meta">
+                                <h4 class="organizer-name">Tat-Seng Chua</h4>
+                                <p class="organizer-affiliate">National University of Singapore</p>
+                            </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <p>
+                    For general information about this challenge, please contact:
+                    </p><ul>
+                        <li>Junbin Xiao and Xindi Shang</li>
+                        <li><a href="mailto:junbin@comp.nus.edu.sg,shangxin@comp.nus.edu.sg">
+                            junbin@comp.nus.edu.sg, shangxin@comp.nus.edu.sg
+                        </a></li>
+                    </ul>
+                    For information about the VideoQA task, please contact:
+                    <ul>
+                        <li>Junbin Xiao and Wei Ji</li>
+                        <li><a href="mailto:junbin@comp.nus.edu.sg,jiwei@nus.edu.sg">
+                            junbin@comp.nus.edu.sg, jiwei@nus.edu.sg
+                        </a></li>
+                    </ul>
+               
+            </div>
+        </section>
+
+        <footer class="footer" style="padding-top: 50px;">
+            <div class="container">
+                <hr>
+                <p style="font-style: italic; text-align: center">
+                    Copyright © 2021-2025 NExT++ /
+                    <a class="black" href="http://www.nextcenter.org/privacy-policy">Privacy Policy</a> /
+                    <a class="black" href="http://www.nextcenter.org/terms-conditions">Terms &amp; Conditions</a> /
+                    <a class="black" href="faq.html">FAQs</a>
+                </p>
+            </div>
+        </footer>
+
+        <script type="text/javascript" src="./description-files/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="./description-files/bootstrap.min.js"></script>
+        <script type="text/javascript" src="./description-files/jquery.easing.min.js"></script>
+        <script type="text/javascript" src="./description-files/scrolling-nav.js"></script>
+    
+
+</body></html>

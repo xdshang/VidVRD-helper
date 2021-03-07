@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="renderer" content="webkit">
+        <title>Main Task - Visual Relation Detection - ACM MM'21 VRU Challenge</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="ACM Multimedia'21 Grand Challenge">
+
+        <link href="styles/bootstrap.min.css" rel="stylesheet">
+        <link href="styles/common.css" rel="stylesheet">
+        <link href="styles/show-json.css" rel="stylesheet">
+    </head>
+
+    <body data-spy="scroll" data-target=".navbar">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <h2 class="navbar-brand hidden-xs hidden-sm" style="padding-top: 0px;padding-bottom: 0px;height: 30px;line-height: 35px">
+                        <span class="logo">Video Relation Understanding</span>
+                    </h2>
+                    <h5 class="hidden-xs hidden-sm" style="margin-bottom: 0px">
+                        <span style="color:#003d7c !important;">ACM Multimedia 2021 Grand Challenge</span>
+                    </h5>
+                    <h2 class="navbar-brand hidden-md hidden-lg">
+                        <span class="logo">VRU Challenge</span>
+                    </h2>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="page-scroll" href="../index.html">Overview</a></li>
+                        <li><a class="page-scroll" href="../index.html#participation">Participation</a></li>
+                        <li><a class="page-scroll" href="../index.html#timeline">Timeline</a></li>
+                        <li><a class="page-scroll" href="../index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- linked this part-->
+        <section id="introduction" class="scrollable-section">
+            <div class="container">
+                <h3>Main Task: Video Relation Detection</h3>
+                <p>
+                    Video Visual Reltion Detection is a novel research problem that is beyond the recognition of single object entity.
+                    It requires the visual system to understand many perspectives of two entities,
+                    including appearance, action, intention, and interactions between them. 
+                    Specifically, it aims to detect instances of visual relations of interest in a video, 
+                    where a visual relation instance is represented by a relation triplet &lt;subject,predicate,object&gt;
+                    with the bounding-box trajectories of the subject and object during the relation happening (as shown in Figure 1).
+                    Note that the detection of social relations <i>(e.g. “is parent of”)</i> and emotional relations <i>(e.g. “like”)</i> is outside the 
+                    scope of this task.
+                </p>
+                <figure class="figure" style="margin-bottom: 12px;">
+                    <img src="assets/fig_videorelation.png" class="figure-img img-responsive center-block">
+                    <figcaption class="figure-caption text-center">
+                        <em>
+                            Figure 1: Examples of visual relation instances in video. Adopted from 
+                            "<a href="https://xdshang.github.io/docs/imagenet-vidvrd.html" target="_blank" style="color:inherit;">
+                                Video visual relation detection
+                            </a>" (ACM MM'17)
+                        </em>
+                    </figcaption>
+                </figure>
+                <p><b><i> 
+                    The top-1 solution in VRU'19 challenge, including precomputed features and bounding box trajectories,
+                    are released at <a href="https://magus.oss-cn-hangzhou.aliyuncs.com/feature/vidvrd-mff.zip">link1</a> (<a href="https://zdtnag7mmr.larksuite.com/file/boxusugavBW2RyKEE277UdPROyb">link2</a>) to facilitate participation. Please kindly cite this 
+                    <a href="https://dl.acm.org/citation.cfm?id=3356076">paper</a> if you use it in your work.
+                </i></b></p>
+            </div>
+        </section>
+        <section id="dataset" class="scrollable-section">
+            <div class="container">
+                <h3>Dataset</h3>
+                <p>
+                    The VidOR dataset for this task consists of user-generated videos from Flickr 
+                    and annotations on 80 categories of object (e.g. "adult", "child", "dog", "table"), 42 categories of verb (action) predicate 
+                    (e.g. "watch", "grab", and "hug") and 8 categories of spatial predicate (e.g. "in front of", "inside", "towards").
+                    In the annotations, each relation instance is labeled and localized in the same way as the instances shown in 
+                    Figure 1 (e.g. "dog-chase-frisbee" from t2 to t4). The training/validation/testing splits are 7,000, 835 and 2,165 videos.
+                    The videos and annotations of the training and validation sets can be downloaded directly from 
+                    <a href="https://xdshang.github.io/docs/vidor.html#downloads" target="_blank">here</a>.
+                </p>
+            </div>
+        </section>
+        <section id="evaluation" class="scrollable-section">
+            <div class="container">
+                <h3>Evaluation Metric</h3>
+                <p>
+                    We adopt Average Precision (AP) to evaluate the detection performance <em>per video</em>
+                    and finally calculate the mean AP (mAP) over all testing videos as the ranking score.
+                    In particular, we calculate AP similarly to that in the Pascal VOC challenge.
+                    To match a predicted relation instance \( (\langle s,p,o\rangle^p,(\mathcal{T}_s^p,\mathcal{T}_o^p)) \) 
+                    to a ground truth \( (\langle s,p,o\rangle^g,(\mathcal{T}_s^g,\mathcal{T}_o^g)) \), we require:
+                    <ul>
+                        <li>their relation triplets to be exactly same, i.e. \( \langle s,p,o\rangle^p = \langle s,p,o\rangle^g \);</li>
+                        <li>their bounding-box trajectories overlap s.t. \( \text{vIoU}(\mathcal{T}_s^p, \mathcal{T}_s^g) \geq 0.5 \) 
+                            and \( \text{vIoU}(\mathcal{T}_o^p, \mathcal{T}_o^g) \geq 0.5 \);
+                        </li>
+                        <li>the minimum overlap of the subject trajectory pair and the object trajectory pair
+                            \( \text{ov}_{pg}=\min{(\text{vIoU}(\mathcal{T}_s^p, \mathcal{T}_s^g), \text{vIoU}(\mathcal{T}_o^p, \mathcal{T}_o^g))} \)
+                            is the maximum among those paired with the other unmatched ground truths \( \mathcal{G} \), i.e.
+                            \( \text{ov}_{pg} \geq \text{ov}_{pg'} (g' \in \mathcal{G}) \).
+                        </li>
+                    </ul>
+                    The term \( \text{vIoU} \) refers to the voluminal Intersection over Union.
+                    While calculating the score, we only consider the <b>top-200 predictions</b> for each video.
+                </p>
+                <p>
+                    The evaluation code used by the evaluation server can be found
+                    <a href="https://github.com/NExTplusplus/VidVRD-helper/blob/master/evaluation/video_relation_detection.py" target="_blank">here</a>.
+                </p>
+            </div>
+        </section>
+        <section id="submission" class="scrollable-section">
+            <div class="container">
+                <h3>Submission Format</h3>
+                <p>
+                    Please use the following JSON format to submit your results to the submission server.
+                    Before uploading the result, please compress the JSON file using 
+                    <a href="https://github.com/NExTplusplus/VidVRD-helper/blob/master/evaluation/README.md">XZ</a>
+                    and make sure the final file size not exceed 100MB.
+                </p>
+                <pre id="sample"></pre>
+                <p>
+                    The example above is illustrative. Comments must be removed in your submission.
+                    A sample submission file is available <a href="assets/submission-task1.json">here</a>.
+                </p>
+            </div>
+        </section>
+
+        <footer class="footer" style="padding-top: 50px;">
+            <div class="container">
+                <hr>
+                <p style="font-style: italic; text-align: center">
+                    Copyright &copy; 2018-2020 NExT++ /
+                    <a class="black" href="http://www.nextcenter.org/privacy-policy">Privacy Policy</a> /
+                    <a class="black" href="http://www.nextcenter.org/terms-conditions">Terms &amp; Conditions</a> /
+                    <a class="black" href="faq.html">FAQs</a>
+                </p>
+            </div>
+        </footer>
+
+        <script type="text/javascript" src="scripts/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+        <script type="text/javascript" src="scripts/jquery.easing.min.js"></script>
+        <script type="text/javascript" src="scripts/scrolling-nav.js"></script>
+        <script type="text/javascript" src="scripts/show-json.js"></script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript">
+            const sample = "{\n" +
+            "  version: \"VERSION 1.0\",\n" +
+            "  results: {\n" +
+            "    \"3249280846\": [                           # video ID\n" +
+            "      {                                       # a detected visual relation instance\n" +
+            "        triplet: [\"dog\", \"bite\", \"frisbee\"],  # relation triplet\n" +
+            "        score: 0.9,                           # confidence score\n" +
+            "        duration: [5, 8],                     # starting (inclusive) and ending (exclusive) frame IDs\n" +
+            "        sub_traj: [                           # subject trajectory\n" +
+            "          [9, 10, 45, 20],                    # bounding box at the starting frame \n" +
+            "          [10, 17, 46, 22],                   # [left, top, right, bottom] (all inclusive)\n" +
+            "          [10, 12, 40, 15]\n" +
+            "        ],\n" +
+            "        obj_traj: [                           # object trajectory\n" +
+            "          [20, 10, 145, 150],\n" +
+            "          [60, 11, 195, 170],\n" +
+            "          [73, 12, 189, 148]\n" +
+            "        ]\n" +
+            "      },\n" +
+            "      {                                       # another detected visual relation instance\n" +
+            "        triplet: [\"adult\", \"watch\", \"dog\"],\n" +
+            "        score: 0.68,\n" +
+            "        duration: [6, 8],\n" +
+            "        sub_traj: [ \n" +
+            "          [89, 10, 128, 80], \n" +
+            "          [90, 10, 128, 79]\n" +
+            "        ],\n" +
+            "        obj_traj: [\n" +
+            "          [10, 17, 46, 22],\n" +
+            "          [10, 12, 40, 16]\n" +
+            "        ]\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  }\n" +
+            "  external_data: {\n" +
+            "    used: true,                               # Boolean flag. True indicates the use of external data.\n" +
+            "    details: \"First fully-connected layer from VGG-16 pre-trained on ILSVRC-2012 training set\" # This string details what kind of external data you used and how you used it.\n" +
+            "  }\n" +
+            "}";
+            $('#sample').html(syntaxHighlight(sample));
+        </script>
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+              tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+            });
+        </script>
+    </body>
+</html>

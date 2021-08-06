@@ -6,8 +6,8 @@ and [VidOR dataset](https://xdshang.github.io/docs/vidor.html).
 It also contains scripts for evaluating several relevant tasks, i.e.
 *video object detection*, *action detection* and *visual relation detection*.
 
-Please note that the enclosed *baseline* does not serve as general baseline for
-those tasks. You can ignore it if you are not working with the VidVRD dataset.
+Please note that the enclosed *baseline* only works for ImageNet-VidVRD. A generalized
+and improved baseline can be found at [here](https://github.com/xdshang/VidVRD-II).
 
 Please cite the following papers if the datasets help your research:
 ```

@@ -48,14 +48,14 @@ def load_relation_feature():
         for duration in durations:
             segs = segment_video(*duration)
             for fstart, fend in segs:
-                extractor.extract_feature(dataset, vid, fstart, fend, verbose=True)
+                extractor.extract_feature(vid, fstart, fend, verbose=True)
 
     video_indices = dataset.get_index(split='test')
     for vid in video_indices:
         anno = dataset.get_anno(vid)
         segs = segment_video(0, anno['frame_count'])
         for fstart, fend in segs:
-            extractor.extract_feature(dataset, vid, fstart, fend, verbose=True)
+            extractor.extract_feature(vid, fstart, fend, verbose=True)
 
 
 def train():

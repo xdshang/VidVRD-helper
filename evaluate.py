@@ -44,7 +44,7 @@ def evaluate_relation(dataset, split, prediction, use_old_zeroshot_eval=False):
             if use_old_zeroshot_eval:
                 # old zero-shot evaluation doesn't filter out non-zeroshot predictions
                 # in a video, which will result in very low Average Precision 
-                zs_prediction[vid] = prediction[vid]
+                zs_prediction[vid] = prediction.get(vid, [])
             else:
                 zs_prediction[vid] = []
                 for r in prediction.get(vid, []):
